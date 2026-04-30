@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# QAuth Web
 
-## Getting Started
+这是一个 Next.js 16 项目，已配置为 **Cloudflare Workers** 可直接部署。
 
-First, run the development server:
+## 本地开发
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Cloudflare Workers 部署（默认配置可用）
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1) 首次登录 Cloudflare
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx wrangler login
+```
 
-## Learn More
+### 2) 一键构建并部署
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run cf:deploy
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> 以上命令会先用 OpenNext 构建 Worker 输出，再调用 Wrangler 部署。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Cloudflare Pages（Git）里如何填 Build 设置
 
-## Deploy on Vercel
+如果你使用 Cloudflare Dashboard 的 Git 自动部署，请使用：
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Build command**: `npm run cf:build`
+- **Build output directory**: `.open-next/assets`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+并在项目根目录保留 `wrangler.jsonc`（本仓库已提供），这样默认流程即可识别 Worker 入口和静态资源目录。
+
+## 为什么你之前报错（WORKER_SELF_REFERENCE）
+
+你截图中的错误是：服务绑定 `WORKER_SELF_REFERENCE` 指向了 `qauth-web`，但该 Worker 在账号里不存在。
+
+本仓库当前配置 **不需要** 这个 service binding。请在 Cloudflare Dashboard 的 Worker/Pages 设置中删除旧的 `WORKER_SELF_REFERENCE` 绑定（如果存在），然后重新部署。
+
+## 可用命令
+
+- `npm run cf:build`：构建 Cloudflare Worker 产物
+- `npm run cf:preview`：本地预览 Worker
+- `npm run cf:deploy`：构建并发布到 Cloudflare
