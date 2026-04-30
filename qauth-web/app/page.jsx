@@ -263,7 +263,7 @@ function SectionTitle({ eyebrow, title, desc }) {
       <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700 ring-1 ring-sky-100">
         ✨ {eyebrow}
       </div>
-      <h2 className="text-3xl font-bold tracking-tight text-slate-950 md:text-5xl">{title}</h2>
+      <h2 className="qauth-section-title text-3xl font-bold tracking-tight text-slate-950 md:text-5xl">{title}</h2>
       <p className="mt-4 text-base leading-8 text-slate-600 md:text-lg">{desc}</p>
     </div>
   );
@@ -392,11 +392,11 @@ function HomePage({ openDemo }) {
                 <Pill>扫码确认</Pill>
                 <Pill>计算挑战</Pill>
               </div>
-              <h1 className="max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl">
+              <h1 className="qauth-hero-title max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl">
                 让登录回到
                 <span className="block bg-gradient-to-r from-sky-200 via-white to-indigo-200 bg-clip-text text-transparent">可信设备本身</span>
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-9 text-slate-300 md:text-xl">
+              <p className="qauth-hero-copy mt-6 max-w-2xl text-lg leading-9 text-slate-200 md:text-xl">
                 QAuth 是一个可复用的身份验证引擎，专为无密码、设备驱动的登录体验设计。它运行在你的产品背后，让用户看到产品品牌，同时由 QAuth 负责安全认证。
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -751,6 +751,7 @@ function DesktopQrDemo() {
             </div>
           </div>
         </Card>
+      </section>
 
         <div className="space-y-5">
           <Card>
@@ -773,8 +774,11 @@ function DesktopQrDemo() {
             </div>
           </Card>
         </div>
-      </div>
-    </DemoFrame>
+        {tab === "desktop" && <DesktopDemo />}
+        {tab === "mobile" && <MobileCheckDemo />}
+        {tab === "passkey" && <PasskeyDemo />}
+      </section>
+    </main>
   );
 }
 
