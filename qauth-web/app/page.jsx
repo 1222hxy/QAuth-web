@@ -751,6 +751,7 @@ function DesktopQrDemo() {
             </div>
           </div>
         </Card>
+      </section>
 
         <div className="space-y-5">
           <Card>
@@ -773,8 +774,11 @@ function DesktopQrDemo() {
             </div>
           </Card>
         </div>
-      </div>
-    </DemoFrame>
+        {tab === "desktop" && <DesktopDemo />}
+        {tab === "mobile" && <MobileCheckDemo />}
+        {tab === "passkey" && <PasskeyDemo />}
+      </section>
+    </main>
   );
 }
 
