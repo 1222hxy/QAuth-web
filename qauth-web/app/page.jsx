@@ -16,6 +16,8 @@ const I18N = {
     theme: "主题",
     light: "日间",
     dark: "夜间",
+    codeTitle: "像 GitHub 一样清晰的认证流程",
+    codeDesc: "将关键步骤放进代码视图，便于开发、产品与安全团队统一理解。",
   },
   en: {
     nav: ["Position", "Capabilities", "Flow", "Demos", "Security", "Roadmap"],
@@ -27,8 +29,21 @@ const I18N = {
     theme: "Theme",
     light: "Light",
     dark: "Dark",
+    codeTitle: "GitHub-style readable auth flow",
+    codeDesc: "Show critical steps in a code view so engineering, product, and security teams stay aligned.",
+    openModal: "Open modal →",
+    reusableEngine: "Reusable passwordless identity engine",
+    poweredBy: "Authentication powered by QAuth",
   },
 };
+const NAV_ITEMS = [
+  { id: "position", zh: "定位", en: "Position" },
+  { id: "capabilities", zh: "能力", en: "Capabilities" },
+  { id: "flow", zh: "流程", en: "Flow" },
+  { id: "demos", zh: "演示", en: "Demos" },
+  { id: "security", zh: "安全", en: "Security" },
+  { id: "roadmap", zh: "路线图", en: "Roadmap" },
+];
 
 function randomId(prefix = "sid_demo") {
   return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
@@ -41,7 +56,8 @@ function randomIpv4Masked() {
   return `${a}.${b}.${c}.xxx`;
 }
 
-const features = [
+const FEATURES = {
+  zh: [
   {
     icon: "🔐",
     title: "通行密钥优先",
@@ -62,7 +78,14 @@ const features = [
     title: "一次性领取码",
     desc: "旧浏览器无法使用实时通道时，可通过手机生成短时、一次性的手动登录码。",
   },
-];
+  ],
+  en: [
+    { icon: "🔐", title: "Passkey-first", desc: "Users sign in with device unlock, Face ID, or fingerprint. The server stores only public keys." },
+    { icon: "📱", title: "Desktop QR sign-in", desc: "Desktop shows a QR code, phone confirms, and session is securely returned to the same browser." },
+    { icon: "🧮", title: "Proof-of-work challenge", desc: "A lightweight browser puzzle raises abuse cost before sensitive login entry points." },
+    { icon: "🗝️", title: "One-time claim code", desc: "When realtime channels are unavailable, users can manually type a short-lived fallback code." },
+  ],
+};
 
 const flows = [
   {
@@ -121,7 +144,8 @@ const roadmap = [
   "高风险操作再验证",
 ];
 
-const demoItems = [
+const DEMO_ITEMS = {
+  zh: [
   { id: "desktopQr", icon: "💻", title: "电脑二维码登录页", desc: "电脑显示二维码、请求符号、IP、地点、浏览器信息。" },
   { id: "mobileConfirm", icon: "📱", title: "手机扫码确认页", desc: "手机扫码后核对请求符号，再确认登录电脑。" },
   { id: "pow", icon: "🧮", title: "计算挑战验证码", desc: "纯前端寻找哈希答案，演示工作量证明式验证码。" },
@@ -129,7 +153,20 @@ const demoItems = [
   { id: "passkeyLogin", icon: "👤", title: "通行密钥登录", desc: "调用浏览器的通行密钥登录能力，显示返回数据。" },
   { id: "classicDesktop", icon: "🔐", title: "电脑端领取码登录", desc: "老浏览器无实时通道时，手动输入手机返回的登录码。" },
   { id: "classicMobile", icon: "🛡️", title: "手机端返回领取码", desc: "手机验证后显示一次性登录码，用于旧浏览器备用登录。" },
-];
+  { id: "sseFlow", icon: "📡", title: "SSE 通信演示", desc: "自动播放服务端事件流状态，展示连接、推送、完成与重连。" },
+  ],
+  en: [
+    { id: "desktopQr", icon: "💻", title: "Desktop QR Sign-in", desc: "Desktop view with QR, request symbols, IP, location, and browser info." },
+    { id: "mobileConfirm", icon: "📱", title: "Mobile Approval", desc: "Phone checks request symbols and approves sign-in for desktop." },
+    { id: "pow", icon: "🧮", title: "Proof-of-work", desc: "Client-side hash puzzle demo to simulate abuse-resistant entry checks." },
+    { id: "register", icon: "🔑", title: "Passkey Registration", desc: "Calls browser passkey registration APIs and prints returned data." },
+    { id: "passkeyLogin", icon: "👤", title: "Passkey Login", desc: "Calls browser passkey assertion APIs and prints returned data." },
+    { id: "classicDesktop", icon: "🔐", title: "Desktop Claim Code", desc: "Manual fallback flow for legacy browsers without realtime channels." },
+    { id: "classicMobile", icon: "🛡️", title: "Mobile Claim Code", desc: "Phone generates a one-time code after verification." },
+    { id: "sseFlow", icon: "📡", title: "SSE Stream Demo", desc: "Auto-play server event stream states with replay controls." },
+  ],
+};
+const demoItems = DEMO_ITEMS.zh;
 
 function GlobalStyles() {
   return (
@@ -301,6 +338,24 @@ function CodeBlock({ code, language = "plaintext" }) {
   );
 }
 
+function GitHubStylePanel({ lang }) {
+  const flowCode =
+    lang === "zh"
+      ? `# QAuth 登录主流程\n1. 浏览器请求一次性挑战 challenge\n2. 用户使用 Passkey 完成设备验证\n3. 服务端验证签名与设备绑定关系\n4. 通过后签发短时会话 token\n5. 高风险操作触发二次校验`
+      : `# QAuth Login Flow\n1. Browser requests one-time challenge\n2. User verifies with device Passkey\n3. Server validates signature and binding\n4. Issue short-lived session token\n5. Re-verify on high-risk actions`;
+
+  return (
+    <section className="mx-auto mt-14 max-w-7xl px-5">
+      <div className="rounded-3xl border border-slate-700 bg-[#0d1117] p-6 text-slate-100 shadow-2xl">
+        <p className="text-xs uppercase tracking-[0.25em] text-sky-300">readability mode</p>
+        <h3 className="mt-2 text-2xl font-bold">{I18N[lang].codeTitle}</h3>
+        <p className="mt-2 text-sm text-slate-300">{I18N[lang].codeDesc}</p>
+        <CodeBlock language="markdown" code={flowCode} />
+      </div>
+    </section>
+  );
+}
+
 function HomePage({ openDemo }) {
   const [lang, setLang] = useState(() => {
     if (typeof window === "undefined") return "zh";
@@ -314,8 +369,11 @@ function HomePage({ openDemo }) {
     const preferDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     return storedTheme === "light" || storedTheme === "dark" ? storedTheme : (preferDark ? "dark" : "light");
   });
-  const nav = I18N[lang].nav;
+  const nav = NAV_ITEMS.map((item) => ({ id: item.id, label: item[lang] }));
+  const features = FEATURES[lang];
+  const demoItems = DEMO_ITEMS[lang];
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(NAV_ITEMS[0].id);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -326,12 +384,29 @@ function HomePage({ openDemo }) {
     localStorage.setItem("qauth_lang", lang);
   }, [lang]);
 
+  useEffect(() => {
+    const targets = NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(Boolean);
+    const onScroll = () => {
+      let current = NAV_ITEMS[0].id;
+      targets.forEach((el) => {
+        if (el.getBoundingClientRect().top <= 140) current = el.id;
+      });
+      setActiveSection(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <div className="qauth-page-enter min-h-screen bg-[linear-gradient(180deg,#0d1117_0%,#161b22_22%,#f6f8fa_22.1%,#f6f8fa_100%)] text-slate-900">
+    <div className={`qauth-page-enter min-h-screen text-slate-900 ${theme === "dark" ? "bg-[radial-gradient(circle_at_20%_0%,#1e293b,#020617_40%,#030712_100%)]" : "bg-[radial-gradient(circle_at_20%_0%,#e0f2fe,#eef2ff_38%,#f8fafc_100%)]"}`}>
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0d1117]/88 text-slate-100 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
           <a href="#top" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-[#161b22] text-xl text-white shadow-lg shadow-black/30">盾</div>
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl border border-sky-300/30 bg-[radial-gradient(circle_at_top,#38bdf8,#0f172a)] text-white shadow-lg shadow-sky-900/40">
+              <span className="absolute h-5 w-5 rounded-full border border-white/70" />
+              <span className="h-2 w-2 rounded-full bg-white" />
+            </div>
             <div>
               <div className="text-lg font-bold tracking-tight text-white">QAuth</div>
                 <div className="qauth-glow-soft text-xs text-slate-300">{I18N[lang].identity}</div>
@@ -340,8 +415,8 @@ function HomePage({ openDemo }) {
 
           <nav className="hidden items-center gap-6 md:flex">
             {nav.map((item) => (
-              <a key={item} href={`#${item}`} className="text-sm font-medium text-slate-300 transition hover:text-white">
-                {item}
+              <a key={item.id} href={`#${item.id}`} className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${activeSection === item.id ? "bg-sky-400/20 text-sky-200 ring-1 ring-sky-300/30" : "text-slate-300 hover:bg-white/10 hover:text-white"}`}>
+                {item.label}
               </a>
             ))}
           </nav>
@@ -368,9 +443,18 @@ function HomePage({ openDemo }) {
         {open && (
           <div className="border-t border-slate-200 bg-white px-5 py-4 md:hidden">
             <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-2">
+                <select value={lang} onChange={(e) => setLang(e.target.value)} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900">
+                  <option value="zh">中文</option>
+                  <option value="en">English</option>
+                </select>
+                <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900">
+                  {I18N[lang].theme}: {theme === "dark" ? I18N[lang].dark : I18N[lang].light}
+                </button>
+              </div>
               {nav.map((item) => (
-                <a key={item} href={`#${item}`} onClick={() => setOpen(false)} className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100">
-                  {item}
+                <a key={item.id} href={`#${item.id}`} onClick={() => setOpen(false)} className={`rounded-xl px-3 py-2 text-sm font-medium ${activeSection === item.id ? "bg-sky-100 text-sky-800" : "text-slate-700 hover:bg-slate-100"}`}>
+                  {item.label}
                 </a>
               ))}
               <button onClick={() => { setOpen(false); openDemo("desktopQr"); }} className="rounded-xl bg-slate-950 px-3 py-3 text-left text-sm font-medium text-white">{I18N[lang].openDemo}</button>
@@ -390,17 +474,17 @@ function HomePage({ openDemo }) {
           <div className="relative mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
               <div className="mb-6 flex flex-wrap gap-2">
-                <Pill>无密码</Pill>
-                <Pill>设备优先</Pill>
-                <Pill>扫码确认</Pill>
-                <Pill>计算挑战</Pill>
+                <Pill>{lang === "zh" ? "无密码" : "Passwordless"}</Pill>
+                <Pill>{lang === "zh" ? "设备优先" : "Device-first"}</Pill>
+                <Pill>{lang === "zh" ? "扫码确认" : "QR approval"}</Pill>
+                <Pill>{lang === "zh" ? "计算挑战" : "PoW challenge"}</Pill>
               </div>
               <h1 className="qauth-glow-strong qauth-hero-title max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl">
-                让登录回到
-                <span className="block bg-gradient-to-r from-sky-200 via-white to-indigo-200 bg-clip-text text-transparent">可信设备本身</span>
+                {lang === "zh" ? "让登录回到" : "Bring sign-in back to"}
+                <span className="block bg-gradient-to-r from-sky-200 via-white to-indigo-200 bg-clip-text text-transparent">{lang === "zh" ? "可信设备本身" : "trusted devices"}</span>
               </h1>
               <p className="qauth-glow-soft qauth-hero-copy mt-6 max-w-2xl text-lg leading-9 text-slate-100 md:text-xl">
-                QAuth 是一个可复用的身份验证引擎，专为无密码、设备驱动的登录体验设计。它运行在你的产品背后，让用户看到产品品牌，同时由 QAuth 负责安全认证。
+                {lang === "zh" ? "QAuth 是一个可复用的身份验证引擎，专为无密码、设备驱动的登录体验设计。它运行在你的产品背后，让用户看到产品品牌，同时由 QAuth 负责安全认证。" : "QAuth is a reusable identity engine for passwordless, device-first sign-in. It runs behind your product brand while handling secure authentication."}
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-slate-200">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 qauth-glow-soft"><ShieldCheck size={14} /> Device-first</span>
@@ -409,10 +493,10 @@ function HomePage({ openDemo }) {
               </div>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <button onClick={() => openDemo("desktopQr")} className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 shadow-2xl shadow-white/10 transition hover:-translate-y-0.5">
-                  进入可点击演示 →
+                  {lang === "zh" ? "进入可点击演示 →" : "Open Interactive Demo →"}
                 </button>
-                <a href="#能力" className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
-                  查看方案能力
+                <a href="#capabilities" className="inline-flex items-center justify-center rounded-full border border-white/20 px-6 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
+                  {lang === "zh" ? "查看方案能力" : "Explore Capabilities"}
                 </a>
               </div>
             </div>
@@ -460,8 +544,9 @@ function HomePage({ openDemo }) {
             </div>
           </div>
         </section>
+        <GitHubStylePanel lang={lang} />
 
-        <section id="定位" className="px-5 py-20 md:py-28">
+        <section id="position" className="px-5 py-20 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="产品定位"
@@ -488,7 +573,7 @@ function HomePage({ openDemo }) {
           </div>
         </section>
 
-        <section id="能力" className="bg-white px-5 py-20 md:py-28">
+        <section id="capabilities" className="bg-white px-5 py-20 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="核心能力"
@@ -507,7 +592,7 @@ function HomePage({ openDemo }) {
           </div>
         </section>
 
-        <section id="流程" className="px-5 py-20 md:py-28">
+        <section id="flow" className="px-5 py-20 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="主要流程"
@@ -533,7 +618,7 @@ function HomePage({ openDemo }) {
           </div>
         </section>
 
-        <section id="演示" className="bg-white px-5 py-20 md:py-28">
+        <section id="demos" className="bg-white px-5 py-20 md:py-28">
           <div className="mx-auto max-w-7xl">
             <SectionTitle
               eyebrow="可点击演示"
@@ -551,7 +636,7 @@ function HomePage({ openDemo }) {
                   <h2 className="text-xl font-semibold tracking-tight">{item.title}</h2>
                   <p className="mt-2 min-h-[48px] text-sm leading-6 text-zinc-600">{item.desc}</p>
                   <div className="mt-5 inline-flex items-center rounded-2xl bg-zinc-100 px-3 py-2 text-sm font-medium text-zinc-700 ring-1 ring-zinc-200 group-hover:bg-zinc-950 group-hover:text-white">
-                    打开弹窗 →
+                    {I18N[lang].openModal}
                   </div>
                 </button>
               ))}
@@ -559,7 +644,7 @@ function HomePage({ openDemo }) {
           </div>
         </section>
 
-        <section id="安全" className="bg-slate-950 px-5 py-20 text-white md:py-28">
+        <section id="security" className="bg-slate-950 px-5 py-20 text-white md:py-28">
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div>
@@ -624,7 +709,7 @@ function HomePage({ openDemo }) {
           </div>
         </section>
 
-        <section id="路线图" className="px-5 py-20 md:py-28">
+        <section id="roadmap" className="px-5 py-20 md:py-28">
           <div className="mx-auto max-w-7xl">
             <div className="overflow-hidden rounded-[2.5rem] bg-slate-950 text-white shadow-2xl shadow-slate-900/20">
               <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
@@ -655,9 +740,9 @@ function HomePage({ openDemo }) {
         <div className="mx-auto flex max-w-7xl flex-col gap-4 text-center md:flex-row md:items-center md:justify-between md:text-left">
           <div>
             <div className="text-lg font-black">QAuth</div>
-            <div className="mt-1 text-sm text-slate-500">可复用的无密码身份验证引擎</div>
+            <div className="mt-1 text-sm text-slate-500">{I18N[lang].reusableEngine}</div>
           </div>
-          <div className="text-sm text-slate-500">身份验证由 QAuth 驱动</div>
+          <div className="text-sm text-slate-500">{I18N[lang].poweredBy}</div>
         </div>
       </footer>
     </div>
@@ -675,6 +760,7 @@ function DemoModal({ page, closing, setPage, closeDemo }) {
     passkeyLogin: "通行密钥登录",
     classicDesktop: "电脑端领取码登录",
     classicMobile: "手机端返回领取码",
+    sseFlow: "SSE 通信演示",
   };
 
   return (
@@ -721,9 +807,63 @@ function DemoModal({ page, closing, setPage, closeDemo }) {
           {page === "passkeyLogin" && <WebAuthnDemo mode="login" />}
           {page === "classicDesktop" && <ClassicDesktopDemo />}
           {page === "classicMobile" && <ClassicMobileDemo />}
+          {page === "sseFlow" && <SSEFlowDemo />}
         </div>
       </div>
     </div>
+  );
+}
+
+function SSEFlowDemo() {
+  const script = useMemo(() => [
+    { t: 600, type: "status", text: "🔌 connecting to /events..." },
+    { t: 1000, type: "event", text: 'event: session.created\ndata: {"sid":"sid_demo_98fa","state":"pending"}' },
+    { t: 900, type: "event", text: 'event: qr.scanned\ndata: {"sid":"sid_demo_98fa","device":"iPhone"}' },
+    { t: 900, type: "event", text: 'event: passkey.verified\ndata: {"sid":"sid_demo_98fa","uv":true}' },
+    { t: 900, type: "event", text: 'event: session.issued\ndata: {"sid":"sid_demo_98fa","token":"sess_xxx"}' },
+    { t: 700, type: "status", text: "✅ stream completed. connection closed." },
+  ], []);
+  const [lines, setLines] = useState(["等待事件流开始..."]);
+  const [running, setRunning] = useState(true);
+
+  useEffect(() => {
+    if (!running) return;
+    let active = true;
+    const timers = [];
+    let elapsed = 0;
+    script.forEach((item) => {
+      elapsed += item.t;
+      timers.push(
+        setTimeout(() => {
+          if (!active) return;
+          setLines((prev) => [...prev, `[${new Date().toLocaleTimeString()}] ${item.text}`]);
+        }, elapsed),
+      );
+    });
+    timers.push(setTimeout(() => active && setRunning(false), elapsed + 50));
+    return () => {
+      active = false;
+      timers.forEach(clearTimeout);
+    };
+  }, [running, script]);
+
+  return (
+    <DemoFrame tag="SSE Demo" title="服务端事件流（SSE）自动演示" subtitle="打开弹窗后自动播放：连接、事件推送、会话签发、结束。可一键重新播放。">
+      <Card>
+        <div className="p-5 sm:p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-semibold">EventStream Console</h3>
+            <Button onClick={() => { if (running) { setRunning(false); } else { setLines([]); setRunning(true); } }} className="h-10 rounded-xl px-4" variant={running ? "danger" : "success"}>
+              {running ? "停止" : "重新播放"}
+            </Button>
+          </div>
+          <CodeBlock
+            language="plaintext"
+            code={lines.length ? lines.join("\n\n") : "等待事件流开始..."}
+          />
+        </div>
+      </Card>
+    </DemoFrame>
   );
 }
 
