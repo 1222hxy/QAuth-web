@@ -393,6 +393,11 @@ function HomePage({ openDemo }) {
         )}
       </header>
 
+          <div className="fixed bottom-4 right-4 z-40 rounded-2xl border border-slate-300/70 bg-white/90 px-3 py-2 text-xs text-slate-700 shadow-lg backdrop-blur md:bottom-6 md:right-6">
+            <div><strong>{I18N[lang].lang}</strong>: {lang === "zh" ? "中文" : "English"}</div>
+            <div><strong>{I18N[lang].theme}</strong>: {theme === "dark" ? I18N[lang].dark : I18N[lang].light}</div>
+          </div>
+
       <main id="top">
         <section className="relative overflow-hidden bg-slate-950 px-5 py-20 text-white md:py-28">
           <div className="absolute inset-0 opacity-40">
