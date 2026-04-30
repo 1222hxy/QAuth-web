@@ -762,6 +762,9 @@ function ProofChallengeDemo() {
         <Card>
           <div className="p-5 sm:p-8">
             <h2 className="text-lg font-semibold">挑战状态</h2>
+            <div className="mt-3 rounded-xl bg-zinc-50 px-3 py-2 text-sm text-zinc-700 ring-1 ring-zinc-200">
+              {status}
+            </div>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <Info icon="🎯" label="目标" value={`哈希以 ${target} 开头`} />
               <Info icon="⏱️" label="耗时" value={`${elapsed} 毫秒`} />
