@@ -324,7 +324,7 @@ function HomePage({ openDemo }) {
   }, [lang]);
 
   return (
-    <div className="qauth-page-enter min-h-screen bg-[radial-gradient(circle_at_top,rgba(15,23,42,0.92)_0%,rgba(10,15,28,0.96)_28%,rgba(241,245,249,1)_54%)] text-slate-900">
+    <div className="qauth-page-enter min-h-screen bg-[radial-gradient(circle_at_top,#1f2937_0%,#0b1220_35%,#f8fafc_36%)] text-slate-900">
       <header className="sticky top-0 z-50 border-b border-slate-700/30 bg-[#0d1117]/85 text-slate-100 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
           <a href="#top" className="flex items-center gap-3">
