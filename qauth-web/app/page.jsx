@@ -770,6 +770,7 @@ function WebAuthnDemo({ mode }) {
   const isRegister = mode === "register";
   const [status, setStatus] = useState(isRegister ? "等待注册" : "等待登录");
   const [output, setOutput] = useState("");
+  const rpId = typeof window === "undefined" ? "" : window.location.hostname;
 
   async function run() {
     setOutput("");
@@ -785,7 +786,7 @@ function WebAuthnDemo({ mode }) {
             challenge: randomBytes(32),
             rp: {
               name: "QAuth 演示",
-              id: "chatgpt.com",
+              id: rpId,
             },
             user: {
               id: randomBytes(16),
@@ -812,7 +813,7 @@ function WebAuthnDemo({ mode }) {
         const assertion = await navigator.credentials.get({
           publicKey: {
             challenge: randomBytes(32),
-            rpId: "chatgpt.com",
+            rpId,
             userVerification: "required",
             timeout: 60000,
           },
@@ -844,7 +845,7 @@ function WebAuthnDemo({ mode }) {
 
             <div className="mt-5 rounded-2xl bg-zinc-50 p-4 text-sm leading-6 text-zinc-600 ring-1 ring-zinc-200">
               <div className="mb-1 font-semibold text-zinc-950">⚠️ 运行限制</div>
-              当前演示把通行密钥域名设置为 chatgpt.com。只有当预览实际运行在 chatgpt.com 或其子域名下时，浏览器才会允许真实创建或登录。
+              当前演示会自动使用当前页面 origin 的 hostname（{rpId || "不可用"}）作为 WebAuthn 域名。请在目标域名下通过 HTTPS 访问。
             </div>
 
             <Button onClick={run} className="mt-5 h-12 w-full rounded-2xl text-base">
