@@ -1,10 +1,44 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 const EMOJIS = ["🦊", "🌙", "🚀", "🍒"];
 const CLAIM = "K7Q9-M4VX-2PDA";
-const DEMO_QR_URL = "https://auth.example.com/scan?sid=sid_demo_9f7a2c";
+const I18N = {
+  zh: {
+    nav: ["定位", "能力", "流程", "演示", "安全", "路线图"],
+    openDemo: "打开演示",
+    menu: "菜单",
+    close: "关闭",
+    identity: "Identity Platform",
+    lang: "语言",
+    theme: "主题",
+    light: "日间",
+    dark: "夜间",
+  },
+  en: {
+    nav: ["Position", "Capabilities", "Flow", "Demos", "Security", "Roadmap"],
+    openDemo: "Open Demo",
+    menu: "Menu",
+    close: "Close",
+    identity: "Identity Platform",
+    lang: "Language",
+    theme: "Theme",
+    light: "Light",
+    dark: "Dark",
+  },
+};
+
+function randomId(prefix = "sid_demo") {
+  return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function randomIpv4Masked() {
+  const a = Math.floor(Math.random() * 223) + 1;
+  const b = Math.floor(Math.random() * 255);
+  const c = Math.floor(Math.random() * 255);
+  return `${a}.${b}.${c}.xxx`;
+}
 
 const features = [
   {
@@ -168,7 +202,7 @@ function Info({ icon, label, value }) {
       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-xl shadow-sm">{icon}</div>
       <div className="min-w-0">
         <p className="text-xs text-zinc-500">{label}</p>
-        <p className="truncate text-sm font-medium text-zinc-950">{value}</p>
+        <p className="text-sm font-medium text-zinc-950 break-all whitespace-normal">{value}</p>
       </div>
     </div>
   );
@@ -235,36 +269,96 @@ function SectionTitle({ eyebrow, title, desc }) {
   );
 }
 
-function HomePage({ openDemo }) {
-  const nav = ["定位", "能力", "流程", "演示", "安全", "路线图"];
-  const [open, setOpen] = useState(false);
+function CodeBlock({ code, language = "plaintext" }) {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!document.getElementById("hljs-theme")) {
+      const link = document.createElement("link");
+      link.id = "hljs-theme";
+      link.rel = "stylesheet";
+      link.href = "https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/styles/github-dark.min.css";
+      document.head.appendChild(link);
+    }
+    const runHighlight = () => window.hljs?.highlightAll?.();
+    if (!window.hljs) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/lib/highlight.min.js";
+      script.async = true;
+      script.onload = runHighlight;
+      document.body.appendChild(script);
+    } else {
+      runHighlight();
+    }
+  }, [code]);
 
   return (
-    <div className="qauth-page-enter min-h-screen bg-slate-50 text-slate-900">
-      <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl">
+    <pre className="mt-4 max-h-[360px] overflow-auto rounded-2xl border border-zinc-800 bg-[#0d1117] p-4 text-xs leading-6 text-zinc-100 shadow-inner">
+      <code className={`language-${language}`}>{code}</code>
+    </pre>
+  );
+}
+
+function HomePage({ openDemo }) {
+  const [lang, setLang] = useState(() => {
+    if (typeof window === "undefined") return "zh";
+    const browserLang = navigator.language?.toLowerCase().startsWith("zh") ? "zh" : "en";
+    const storedLang = localStorage.getItem("qauth_lang");
+    return storedLang === "zh" || storedLang === "en" ? storedLang : browserLang;
+  });
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === "undefined") return "dark";
+    const storedTheme = localStorage.getItem("qauth_theme");
+    const preferDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return storedTheme === "light" || storedTheme === "dark" ? storedTheme : (preferDark ? "dark" : "light");
+  });
+  const nav = I18N[lang].nav;
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("qauth_theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("qauth_lang", lang);
+  }, [lang]);
+
+  return (
+    <div className="qauth-page-enter min-h-screen bg-[radial-gradient(circle_at_top,#1f2937_0%,#0b1220_35%,#f8fafc_36%)] text-slate-900">
+      <header className="sticky top-0 z-50 border-b border-slate-700/30 bg-[#0d1117]/85 text-slate-100 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
           <a href="#top" className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-950 text-xl text-white shadow-lg shadow-slate-900/20">盾</div>
             <div>
-              <div className="text-lg font-bold tracking-tight">QAuth</div>
-              <div className="text-xs text-slate-500">身份验证引擎</div>
+              <div className="text-lg font-bold tracking-tight text-white">QAuth</div>
+              <div className="text-xs text-slate-400">{I18N[lang].identity}</div>
             </div>
           </a>
 
           <nav className="hidden items-center gap-6 md:flex">
             {nav.map((item) => (
-              <a key={item} href={`#${item}`} className="text-sm font-medium text-slate-600 transition hover:text-slate-950">
+              <a key={item} href={`#${item}`} className="text-sm font-medium text-slate-300 transition hover:text-white">
                 {item}
               </a>
             ))}
           </nav>
 
+          <div className="hidden items-center gap-2 md:flex">
+            <select value={lang} onChange={(e) => setLang(e.target.value)} className="rounded-full border border-slate-600 bg-slate-900/70 px-3 py-2 text-xs text-slate-200">
+              <option value="zh">中文</option>
+              <option value="en">English</option>
+            </select>
+            <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-full border border-slate-600 bg-slate-900/70 px-3 py-2 text-xs text-slate-200 transition">
+              {I18N[lang].theme}: {theme === "dark" ? I18N[lang].dark : I18N[lang].light}
+            </button>
+          </div>
+
           <button onClick={() => openDemo("desktopQr")} className="hidden rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:bg-slate-800 md:inline-flex">
-            打开演示
+            {I18N[lang].openDemo}
           </button>
 
           <button onClick={() => setOpen(!open)} className="rounded-xl border border-slate-200 p-2 md:hidden" aria-label="打开导航">
-            {open ? "关闭" : "菜单"}
+            {open ? I18N[lang].close : I18N[lang].menu}
           </button>
         </div>
 
@@ -276,7 +370,7 @@ function HomePage({ openDemo }) {
                   {item}
                 </a>
               ))}
-              <button onClick={() => { setOpen(false); openDemo("desktopQr"); }} className="rounded-xl bg-slate-950 px-3 py-3 text-left text-sm font-medium text-white">打开演示</button>
+              <button onClick={() => { setOpen(false); openDemo("desktopQr"); }} className="rounded-xl bg-slate-950 px-3 py-3 text-left text-sm font-medium text-white">{I18N[lang].openDemo}</button>
             </div>
           </div>
         )}
@@ -626,6 +720,21 @@ function DemoModal({ page, closing, setPage, closeDemo }) {
 }
 
 function DesktopQrDemo() {
+  const [sessionId, setSessionId] = useState("sid_demo_9f7a2c");
+  const [address, setAddress] = useState("223.104.68.xxx");
+  const [location, setLocation] = useState("广东 · 中国");
+  const [browser, setBrowser] = useState("Chrome on Windows 11");
+  const [nonce, setNonce] = useState("9f7a2c1b");
+  const qrPayload = `https://auth.example.com/scan?sid=${sessionId}&nonce=${nonce}`;
+
+  function regenerate() {
+    setSessionId(randomId());
+    setAddress(randomIpv4Masked());
+    setLocation("演示位置 · 动态生成");
+    setBrowser(`${navigator.userAgent.slice(0, 28)}...`);
+    setNonce(Math.random().toString(36).slice(2, 16));
+  }
+
   return (
     <DemoFrame tag="电脑登录" title="电脑端二维码登录" subtitle="二维码里只放会话编号。请求符号只显示在电脑屏幕上，不放进二维码。">
       <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
@@ -648,10 +757,10 @@ function DesktopQrDemo() {
             <div className="p-5 sm:p-6">
               <h2 className="mb-4 text-lg font-semibold">登录请求信息</h2>
               <div className="space-y-3">
-                <Info icon="🧩" label="会话编号" value="sid_demo_9f7a2c" />
-                <Info icon="🌐" label="电脑地址" value="223.104.68.xxx" />
-                <Info icon="📍" label="大概地点" value="广东 · 中国" />
-                <Info icon="💻" label="浏览器" value="Chrome on Windows 11" />
+                <Info icon="🧩" label="会话编号" value={sessionId} />
+                <Info icon="🌐" label="电脑地址" value={address} />
+                <Info icon="📍" label="大概地点" value={location} />
+                <Info icon="💻" label="浏览器" value={browser} />
               </div>
             </div>
           </Card>
@@ -659,8 +768,8 @@ function DesktopQrDemo() {
           <Card>
             <div className="p-5 sm:p-6">
               <h2 className="mb-3 text-lg font-semibold">二维码内容演示</h2>
-              <div className="break-all rounded-2xl bg-zinc-950 p-4 font-mono text-xs leading-6 text-zinc-100">{DEMO_QR_URL}</div>
-              <Button className="mt-4 h-12 w-full rounded-2xl" variant="outline">↻ 重新生成二维码</Button>
+              <div className="break-all rounded-2xl bg-zinc-950 p-4 font-mono text-xs leading-6 text-zinc-100">{qrPayload}</div>
+              <Button onClick={regenerate} className="mt-4 h-12 w-full rounded-2xl" variant="outline">↻ 重新生成二维码</Button>
             </div>
           </Card>
         </div>
@@ -770,6 +879,7 @@ function WebAuthnDemo({ mode }) {
   const isRegister = mode === "register";
   const [status, setStatus] = useState(isRegister ? "等待注册" : "等待登录");
   const [output, setOutput] = useState("");
+  const [credentialCreated, setCredentialCreated] = useState(false);
   const rpId = typeof window === "undefined" ? "" : window.location.hostname;
 
   async function run() {
@@ -790,8 +900,8 @@ function WebAuthnDemo({ mode }) {
             },
             user: {
               id: randomBytes(16),
-              name: "demo-user@example.com",
-              displayName: "演示用户",
+              name: "QAuth@display.auth",
+              displayName: "QAuth@display.auth",
             },
             pubKeyCredParams: [
               { type: "public-key", alg: -7 },
@@ -808,6 +918,7 @@ function WebAuthnDemo({ mode }) {
           },
         });
         setStatus("注册调用完成。真实项目要把这个结果发给后端验证并保存公钥。");
+        setCredentialCreated(true);
         setOutput(JSON.stringify(displayCredential(credential, "register"), null, 2));
       } else {
         const assertion = await navigator.credentials.get({
@@ -848,8 +959,8 @@ function WebAuthnDemo({ mode }) {
               当前演示会自动使用当前页面 origin 的 hostname（{rpId || "不可用"}）作为 WebAuthn 域名。请在目标域名下通过 HTTPS 访问。
             </div>
 
-            <Button onClick={run} className="mt-5 h-12 w-full rounded-2xl text-base">
-              {isRegister ? "🛡️ 创建通行密钥" : "🛡️ 使用通行密钥登录"}
+            <Button disabled={isRegister && credentialCreated} onClick={run} className="mt-5 h-12 w-full rounded-2xl text-base">
+              {isRegister ? (credentialCreated ? "✅ 凭据已创建" : "🛡️ 创建通行密钥") : "🛡️ 使用通行密钥登录"}
             </Button>
           </div>
         </Card>
@@ -858,7 +969,7 @@ function WebAuthnDemo({ mode }) {
           <div className="p-5 sm:p-8">
             <h2 className="text-lg font-semibold">前端返回数据</h2>
             <div className="mt-3 rounded-2xl bg-zinc-50 p-4 text-sm text-zinc-700 ring-1 ring-zinc-200">{status}</div>
-            <pre className="mt-4 max-h-[560px] overflow-auto rounded-2xl bg-zinc-950 p-4 text-xs leading-6 text-zinc-100">
+            <pre className="mt-4 max-h-[560px] overflow-auto whitespace-pre-wrap break-all rounded-2xl bg-zinc-950 p-4 text-xs leading-6 text-zinc-100">
               {output || (isRegister ? "// 点击创建后，这里会显示通行密钥注册返回数据。" : "// 点击登录后，这里会显示通行密钥登录返回数据。")}
             </pre>
           </div>
@@ -883,7 +994,9 @@ function ProofChallengeDemo() {
   const [elapsed, setElapsed] = useState(0);
   const [verified, setVerified] = useState(false);
   const stopRef = useRef(false);
-  const challenge = useMemo(() => "qauth:qr_new:sid_demo_9f7a2c:1746000000", []);
+  const [salt, setSalt] = useState(() => Math.random().toString(36).slice(2, 10));
+  const [issuedAt, setIssuedAt] = useState(() => Date.now());
+  const challenge = useMemo(() => `qauth:qr_new:sid_demo_9f7a2c:${issuedAt}:${salt}`, [issuedAt, salt]);
   const target = "0".repeat(difficulty);
 
   async function start() {
@@ -893,6 +1006,8 @@ function ProofChallengeDemo() {
     }
 
     stopRef.current = false;
+    setSalt(Math.random().toString(36).slice(2, 10));
+    setIssuedAt(Date.now());
     setRunning(true);
     setVerified(false);
     setNonce(0);
@@ -990,6 +1105,11 @@ function ProofChallengeDemo() {
               <p className="mb-2 text-sm font-medium text-zinc-300">当前哈希</p>
               <div className="min-h-[72px] break-all font-mono text-xs leading-6">{hash || "等待计算结果……"}</div>
             </div>
+
+            <CodeBlock
+              language="json"
+              code={JSON.stringify({ challenge, target, nonce, hash: hash || null, elapsedMs: elapsed, salt }, null, 2)}
+            />
 
             <div className="mt-4 rounded-2xl bg-amber-50 p-4 text-sm leading-6 text-amber-900 ring-1 ring-amber-200">
               真实项目中还要检查：挑战未过期、未使用、绑定具体操作、绑定风险策略，并在通过后立即标记为已使用。
