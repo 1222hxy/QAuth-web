@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { GitBranch, ShieldCheck, Sparkles } from "lucide-react";
 
 const EMOJIS = ["🦊", "🌙", "🚀", "🍒"];
 const CLAIM = "K7Q9-M4VX-2PDA";
@@ -166,6 +167,8 @@ function GlobalStyles() {
       .qauth-modal-panel-close { animation: qauthModalPanelOut 220ms cubic-bezier(.22,1,.36,1) both; }
       .qauth-hide-scrollbar::-webkit-scrollbar { width: 10px; }
       .qauth-hide-scrollbar::-webkit-scrollbar-thumb { background: rgba(24,24,27,.22); border-radius: 999px; border: 3px solid transparent; background-clip: content-box; }
+      .qauth-glow-soft { text-shadow: 0 0 18px rgba(148, 163, 184, .35), 0 0 2px rgba(255, 255, 255, .5); }
+      .qauth-glow-strong { text-shadow: 0 0 28px rgba(56, 189, 248, .45), 0 0 8px rgba(255, 255, 255, .5); }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .qauth-page-enter, .qauth-soft-enter, .qauth-modal-overlay-open, .qauth-modal-overlay-close, .qauth-modal-panel-open, .qauth-modal-panel-close { animation: none !important; }
@@ -324,14 +327,14 @@ function HomePage({ openDemo }) {
   }, [lang]);
 
   return (
-    <div className="qauth-page-enter min-h-screen bg-[radial-gradient(circle_at_top,#1f2937_0%,#0b1220_35%,#f8fafc_36%)] text-slate-900">
-      <header className="sticky top-0 z-50 border-b border-slate-700/30 bg-[#0d1117]/85 text-slate-100 backdrop-blur-xl">
+    <div className="qauth-page-enter min-h-screen bg-[linear-gradient(180deg,#0d1117_0%,#161b22_22%,#f6f8fa_22.1%,#f6f8fa_100%)] text-slate-900">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0d1117]/88 text-slate-100 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
           <a href="#top" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-950 text-xl text-white shadow-lg shadow-slate-900/20">盾</div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-[#161b22] text-xl text-white shadow-lg shadow-black/30">盾</div>
             <div>
               <div className="text-lg font-bold tracking-tight text-white">QAuth</div>
-              <div className="text-xs text-slate-400">{I18N[lang].identity}</div>
+                <div className="qauth-glow-soft text-xs text-slate-300">{I18N[lang].identity}</div>
             </div>
           </a>
 
@@ -344,16 +347,16 @@ function HomePage({ openDemo }) {
           </nav>
 
           <div className="hidden items-center gap-2 md:flex">
-            <select value={lang} onChange={(e) => setLang(e.target.value)} className="rounded-full border border-slate-600 bg-slate-900/70 px-3 py-2 text-xs text-slate-200">
+            <select value={lang} onChange={(e) => setLang(e.target.value)} className="rounded-full border border-white/15 bg-[#161b22] px-3 py-2 text-xs text-slate-200">
               <option value="zh">中文</option>
               <option value="en">English</option>
             </select>
-            <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-full border border-slate-600 bg-slate-900/70 px-3 py-2 text-xs text-slate-200 transition">
+            <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="rounded-full border border-white/15 bg-[#161b22] px-3 py-2 text-xs text-slate-200 transition hover:border-sky-400/30">
               {I18N[lang].theme}: {theme === "dark" ? I18N[lang].dark : I18N[lang].light}
             </button>
           </div>
 
-          <button onClick={() => openDemo("desktopQr")} className="hidden rounded-full bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:bg-slate-800 md:inline-flex">
+            <button onClick={() => openDemo("desktopQr")} className="hidden rounded-full border border-sky-400/30 bg-gradient-to-r from-sky-500 to-indigo-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-900/30 transition hover:-translate-y-0.5 hover:brightness-110 md:inline-flex">
             {I18N[lang].openDemo}
           </button>
 
@@ -377,7 +380,7 @@ function HomePage({ openDemo }) {
       </header>
 
       <main id="top">
-        <section className="relative overflow-hidden bg-slate-950 px-5 py-20 text-white md:py-28">
+        <section className="relative overflow-hidden bg-[#0d1117] px-5 py-20 text-white md:py-28">
           <div className="absolute inset-0 opacity-40">
             <div className="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-sky-500 blur-3xl" />
             <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-indigo-500 blur-3xl" />
@@ -392,13 +395,18 @@ function HomePage({ openDemo }) {
                 <Pill>扫码确认</Pill>
                 <Pill>计算挑战</Pill>
               </div>
-              <h1 className="qauth-hero-title max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl">
+              <h1 className="qauth-glow-strong qauth-hero-title max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl">
                 让登录回到
                 <span className="block bg-gradient-to-r from-sky-200 via-white to-indigo-200 bg-clip-text text-transparent">可信设备本身</span>
               </h1>
-              <p className="qauth-hero-copy mt-6 max-w-2xl text-lg leading-9 text-slate-200 md:text-xl">
+              <p className="qauth-glow-soft qauth-hero-copy mt-6 max-w-2xl text-lg leading-9 text-slate-100 md:text-xl">
                 QAuth 是一个可复用的身份验证引擎，专为无密码、设备驱动的登录体验设计。它运行在你的产品背后，让用户看到产品品牌，同时由 QAuth 负责安全认证。
               </p>
+              <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-slate-200">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 qauth-glow-soft"><ShieldCheck size={14} /> Device-first</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 qauth-glow-soft"><GitBranch size={14} /> GitHub-inspired UI</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-3 py-1.5 qauth-glow-soft"><Sparkles size={14} /> Better readability</span>
+              </div>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <button onClick={() => openDemo("desktopQr")} className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-semibold text-slate-950 shadow-2xl shadow-white/10 transition hover:-translate-y-0.5">
                   进入可点击演示 →
@@ -751,8 +759,6 @@ function DesktopQrDemo() {
             </div>
           </div>
         </Card>
-      </section>
-
         <div className="space-y-5">
           <Card>
             <div className="p-5 sm:p-6">
@@ -774,11 +780,8 @@ function DesktopQrDemo() {
             </div>
           </Card>
         </div>
-        {tab === "desktop" && <DesktopDemo />}
-        {tab === "mobile" && <MobileCheckDemo />}
-        {tab === "passkey" && <PasskeyDemo />}
-      </section>
-    </main>
+      </div>
+    </DemoFrame>
   );
 }
 
