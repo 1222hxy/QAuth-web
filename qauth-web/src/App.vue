@@ -85,7 +85,7 @@ function openDemo(id: DemoId) {
 <template>
   <main class="qauth-page-bg min-h-screen overflow-hidden text-[#111] dark:text-[#f4f4f0]">
     <header class="sticky top-0 z-40 border-b border-black/10 bg-[#f7f7f4]/90 backdrop-blur-2xl dark:border-white/10 dark:bg-[#111]/85">
-      <div class="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 md:px-8">
+      <div class="mx-auto flex max-w-[1440px] items-center justify-between gap-3 px-3 py-3 md:px-8">
         <button class="group flex items-center gap-3" @click="navigate('/')">
           <span class="grid size-9 place-items-center rounded-full bg-[#111] text-white dark:bg-white dark:text-[#111]"><ShieldCheck :size="18" /></span>
           <span class="text-left">
@@ -100,10 +100,10 @@ function openDemo(id: DemoId) {
           </button>
         </nav>
 
-        <div class="flex items-center gap-2">
-          <Button variant="ghost" size="sm" class="rounded-full" @click="lang = lang === 'zh' ? 'en' : 'zh'"><Languages :size="15" />{{ lang.toUpperCase() }}</Button>
-          <Button variant="ghost" size="sm" class="rounded-full" @click="dark = !dark"><Sun v-if="dark" :size="16" /><Moon v-else :size="16" /></Button>
-          <Button size="sm" class="rounded-full px-4" @click="navigate('/demo#demos')">{{ t.demo }}</Button>
+        <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <Button variant="ghost" size="sm" class="rounded-full px-2 sm:px-3" @click="lang = lang === 'zh' ? 'en' : 'zh'"><Languages :size="15" /><span class="hidden sm:inline">{{ lang.toUpperCase() }}</span></Button>
+          <Button variant="ghost" size="sm" class="rounded-full px-2 sm:px-3" @click="dark = !dark"><Sun v-if="dark" :size="16" /><Moon v-else :size="16" /></Button>
+          <Button size="sm" class="rounded-full px-3 sm:px-4" @click="navigate('/demo#demos')">{{ t.demo }}</Button>
         </div>
       </div>
     </header>
