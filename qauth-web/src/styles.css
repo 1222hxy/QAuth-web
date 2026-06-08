@@ -78,19 +78,6 @@ a {
   content: "";
 }
 
-.qauth-qr {
-  background-color: #fff;
-  background-image:
-    linear-gradient(90deg, #0f172a 10px, transparent 10px),
-    linear-gradient(#0f172a 10px, transparent 10px),
-    radial-gradient(circle, #0f172a 34%, transparent 36%),
-    radial-gradient(circle at 20% 20%, #0f172a 0 18px, transparent 19px),
-    radial-gradient(circle at 80% 20%, #0f172a 0 18px, transparent 19px),
-    radial-gradient(circle at 20% 80%, #0f172a 0 18px, transparent 19px);
-  background-position: 0 0, 0 0, 7px 9px, 0 0, 0 0, 0 0;
-  background-size: 38px 38px, 38px 38px, 23px 23px, 100% 100%, 100% 100%, 100% 100%;
-}
-
 @keyframes qauth-progress {
   0% {
     transform: translateX(-100%);
