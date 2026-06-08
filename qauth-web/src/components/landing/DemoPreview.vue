@@ -17,15 +17,23 @@ const active = ref(1);
 let timer: number | undefined;
 
 const statusText = computed(() => steps[active.value]?.meta ?? steps[1].meta);
-const shortSession = computed(() => `${session.id.slice(0, 18)}…${session.id.slice(-6)}`);
+const shortSession = computed(() => `${session.id.slice(0, 14)}…${session.id.slice(-6)}`);
+const qrApproved = computed(() => active.value >= 3);
+const phoneFocused = computed(() => active.value >= 2);
 
 onMounted(() => {
   timer = window.setInterval(() => {
     active.value = active.value >= steps.length - 1 ? 1 : active.value + 1;
-  }, 2200);
+  }, 2400);
 });
 
 onBeforeUnmount(() => window.clearInterval(timer));
+
+function stepState(index: number) {
+  if (index < active.value) return "completed";
+  if (index === active.value) return "active";
+  return "pending";
+}
 </script>
 
 <template>
@@ -41,53 +49,75 @@ onBeforeUnmount(() => window.clearInterval(timer));
         </Badge>
       </div>
 
-      <div class="mt-5 grid gap-4 lg:grid-cols-[0.92fr_1.08fr]">
-        <div class="rounded-[1.35rem] border border-border bg-card p-3 shadow-sm">
+      <div class="mt-5 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <div class="qauth-demo-panel rounded-[1.35rem] border border-border bg-card p-3 shadow-sm transition duration-300" :class="active === 1 ? 'scale-100 opacity-100 ring-1 ring-foreground/10' : 'scale-[0.985] opacity-[0.78]'">
           <div class="flex items-center justify-between text-xs text-muted-foreground">
             <span>Scan challenge</span>
-            <span>expires in 01:48</span>
+            <Transition name="qauth-status" mode="out-in">
+              <span :key="qrApproved ? 'approved' : 'waiting'">{{ qrApproved ? 'approved' : 'expires in 01:48' }}</span>
+            </Transition>
           </div>
-          <div class="mt-3 rounded-[1.1rem] border border-border bg-white p-3 dark:bg-zinc-100">
-            <RealQrCode :value="session.payload" class="mx-auto size-[min(58vw,14.5rem)] rounded-xl sm:size-56" />
+          <div class="relative mt-3 rounded-[1.1rem] border border-border bg-white p-3 dark:bg-zinc-100">
+            <span v-if="!qrApproved" class="qauth-breathing-ring absolute inset-2 rounded-[0.95rem] border border-emerald-500/25" aria-hidden="true" />
+            <Transition name="qauth-qr-state" mode="out-in">
+              <div v-if="qrApproved" key="approved" class="grid size-[min(58vw,13.25rem)] place-items-center rounded-xl bg-white text-center sm:size-52">
+                <div>
+                  <span class="mx-auto grid size-12 place-items-center rounded-full bg-emerald-500/10 text-emerald-700"><CheckCircle2 :size="24" /></span>
+                  <p class="mt-3 text-sm font-semibold text-neutral-950">Verified</p>
+                  <p class="mt-1 text-xs text-neutral-500">session approved</p>
+                </div>
+              </div>
+              <RealQrCode v-else key="qr" :value="session.payload" class="mx-auto size-[min(58vw,13.25rem)] rounded-xl sm:size-52" />
+            </Transition>
           </div>
           <div class="mt-3 grid grid-cols-4 gap-2">
-            <span v-for="symbol in session.symbols" :key="symbol" class="grid h-10 place-items-center rounded-xl border border-border bg-secondary text-xl">{{ symbol }}</span>
+            <span v-for="symbol in session.symbols" :key="symbol" class="grid h-9 place-items-center rounded-xl border border-border bg-secondary text-lg transition duration-300" :class="qrApproved ? 'opacity-[0.55]' : 'opacity-100'">{{ symbol }}</span>
           </div>
         </div>
 
         <div class="space-y-3">
-          <div class="rounded-[1.35rem] border border-border bg-card p-4 shadow-sm">
+          <div class="qauth-demo-panel rounded-[1.35rem] border border-border bg-card p-4 shadow-sm transition duration-300" :class="phoneFocused ? 'scale-100 opacity-100 ring-1 ring-foreground/10' : 'scale-[0.985] opacity-75'">
             <div class="flex items-center justify-between gap-3">
               <div class="flex items-center gap-3">
-                <span class="grid size-10 place-items-center rounded-full bg-secondary text-foreground"><Smartphone :size="18" /></span>
+                <span class="grid size-10 place-items-center rounded-full bg-secondary text-foreground transition duration-300" :class="phoneFocused ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300' : ''"><Smartphone :size="18" /></span>
                 <div>
                   <p class="text-sm font-semibold text-foreground">iPhone 15 Pro</p>
                   <p class="text-xs text-muted-foreground">Trusted device · Shanghai CN</p>
                 </div>
               </div>
-              <span class="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">verified device</span>
+              <Transition name="qauth-status" mode="out-in">
+                <span :key="phoneFocused ? 'verified' : 'waiting'" class="rounded-full px-2.5 py-1 text-xs font-medium" :class="phoneFocused ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300' : 'bg-secondary text-muted-foreground'">{{ phoneFocused ? 'verified device' : 'waiting' }}</span>
+              </Transition>
             </div>
             <div class="mt-4 grid gap-2 text-xs text-muted-foreground">
-              <p class="flex items-center justify-between gap-3"><span>session id</span><span class="break-all font-mono text-foreground/80">{{ shortSession }}</span></p>
+              <p class="flex items-center justify-between gap-3"><span>session id</span><span class="truncate font-mono text-foreground/80">{{ shortSession }}</span></p>
               <p class="flex items-center justify-between gap-3"><span>browser binding</span><span class="font-mono text-foreground/80">{{ session.browserBinding.slice(0, 12) }}</span></p>
             </div>
           </div>
 
-          <TransitionGroup name="qauth-status" tag="ol" class="space-y-2">
-            <li v-for="(step, index) in steps" :key="step.title" class="flex items-center gap-3 rounded-2xl border p-3 transition duration-300" :class="index <= active ? 'border-foreground/12 bg-secondary text-foreground' : 'border-border bg-transparent text-muted-foreground'">
-              <span class="grid size-8 shrink-0 place-items-center rounded-full" :class="index <= active ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'">
+          <ol class="space-y-2">
+            <li v-for="(step, index) in steps" :key="step.title" class="qauth-demo-step flex items-center gap-3 rounded-2xl border p-3 transition duration-300" :class="{
+              'border-emerald-500/25 bg-emerald-500/10 text-foreground shadow-sm': stepState(index) === 'active',
+              'border-foreground/12 bg-secondary/70 text-foreground': stepState(index) === 'completed',
+              'scale-[0.985] border-border bg-transparent text-muted-foreground opacity-[0.62]': stepState(index) === 'pending'
+            }">
+              <span class="grid size-8 shrink-0 place-items-center rounded-full transition duration-300" :class="stepState(index) === 'pending' ? 'bg-secondary text-muted-foreground' : 'bg-primary text-primary-foreground'">
                 <component :is="step.icon" :size="15" />
               </span>
-              <span class="min-w-0">
+              <span class="min-w-0 flex-1">
                 <span class="block text-sm font-medium">{{ step.title }}</span>
-                <span class="block text-xs text-muted-foreground">{{ step.meta }}</span>
+                <Transition name="qauth-status" mode="out-in">
+                  <span :key="`${step.meta}-${stepState(index)}`" class="block text-xs text-muted-foreground">{{ stepState(index) === 'completed' ? 'Completed' : step.meta }}</span>
+                </Transition>
               </span>
             </li>
-          </TransitionGroup>
+          </ol>
 
           <div class="flex items-center gap-2 rounded-2xl border border-border bg-background/60 px-4 py-3 text-sm text-muted-foreground">
             <Clock3 :size="16" />
-            <span>{{ statusText }}</span>
+            <Transition name="qauth-status" mode="out-in">
+              <span :key="statusText">{{ statusText }}</span>
+            </Transition>
           </div>
         </div>
       </div>

@@ -18,10 +18,10 @@ const emit = defineEmits<{
 const isScrolled = ref(false);
 const menuOpen = ref(false);
 const headerClasses = computed(() => [
-  "sticky top-0 z-40 border-b backdrop-blur-2xl transition-[background-color,border-color,box-shadow] duration-300",
+  "sticky top-0 z-40 border-b backdrop-blur-2xl transition-[background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
   isScrolled.value
-    ? "border-border/90 bg-background/86 shadow-[0_1px_18px_hsl(var(--foreground)/0.06)]"
-    : "border-border/50 bg-background/72",
+    ? "border-border/80 bg-background/88 shadow-[0_1px_22px_hsl(var(--foreground)/0.07)]"
+    : "border-transparent bg-background/55 shadow-none",
 ]);
 
 onMounted(() => {
@@ -55,8 +55,8 @@ function go(target: string | NavTarget) {
         </span>
       </button>
 
-      <nav class="hidden items-center rounded-full border border-border/70 bg-card/45 px-2 py-1 shadow-sm lg:flex" aria-label="Main navigation">
-        <button v-for="item in navItems" :key="item.label" class="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition duration-200 hover:bg-secondary hover:text-foreground active:scale-[0.98]" @click="go(item)">
+      <nav class="hidden items-center rounded-full border border-border/70 bg-card/45 px-2 py-1 shadow-sm transition duration-300 hover:bg-card/70 lg:flex" aria-label="Main navigation">
+        <button v-for="item in navItems" :key="item.label" class="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition duration-200 hover:-translate-y-px hover:bg-secondary hover:text-foreground active:translate-y-0 active:scale-[0.98]" @click="go(item)">
           {{ item.label }}
         </button>
       </nav>
@@ -75,7 +75,7 @@ function go(target: string | NavTarget) {
     <Transition name="qauth-mobile-menu">
       <div v-if="menuOpen" class="border-t border-border bg-background/96 px-4 pb-5 pt-3 shadow-xl backdrop-blur-2xl md:hidden">
         <nav class="mx-auto grid max-w-7xl gap-1" aria-label="Mobile navigation">
-          <button v-for="item in navItems" :key="item.label" class="rounded-2xl px-4 py-3 text-left text-base font-medium text-foreground transition hover:bg-secondary active:scale-[0.99]" @click="go(item)">
+          <button v-for="item in navItems" :key="item.label" class="rounded-2xl px-4 py-3 text-left text-base font-medium text-foreground transition duration-200 hover:bg-secondary active:scale-[0.99]" @click="go(item)">
             {{ item.label }}
           </button>
         </nav>

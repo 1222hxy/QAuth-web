@@ -10,7 +10,7 @@ defineEmits<{ openDemo: [id: DemoId] }>();
 </script>
 
 <template>
-  <section id="demos" class="mx-auto max-w-7xl scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+  <section id="demos" class="qauth-section-enter mx-auto max-w-7xl scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
     <div class="mb-8 flex flex-col justify-between gap-5 border-t border-border pt-8 lg:flex-row lg:items-end">
       <div class="max-w-2xl">
         <p class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Demo experience</p>

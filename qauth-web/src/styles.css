@@ -97,7 +97,7 @@ button {
 }
 
 .qauth-card-hover {
-  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), background-color 220ms ease, border-color 220ms ease, box-shadow 260ms ease;
 }
 
 .qauth-card-hover:hover {
@@ -120,7 +120,7 @@ button {
 .qauth-status-leave-active,
 .qauth-mobile-menu-enter-active,
 .qauth-mobile-menu-leave-active {
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1), transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .qauth-status-enter-from,
@@ -154,4 +154,78 @@ button {
     transition-duration: 0.001ms !important;
   }
   .qauth-card-hover:hover { transform: none; }
+}
+
+.qauth-section-enter {
+  animation: qauth-section-enter 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.qauth-section-enter:nth-of-type(2) { animation-delay: 60ms; }
+.qauth-section-enter:nth-of-type(3) { animation-delay: 100ms; }
+.qauth-section-enter:nth-of-type(4) { animation-delay: 140ms; }
+.qauth-section-enter:nth-of-type(5) { animation-delay: 180ms; }
+
+@keyframes qauth-section-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.qauth-copy-label-enter-active,
+.qauth-copy-label-leave-active {
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.qauth-copy-label-enter-from,
+.qauth-copy-label-leave-to {
+  opacity: 0;
+  transform: translateY(3px);
+}
+
+.qauth-shiki pre {
+  margin: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+  font-size: 13px !important;
+  line-height: 1.75 !important;
+  white-space: pre !important;
+  min-width: max-content;
+}
+
+.qauth-shiki code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  font-family: inherit !important;
+}
+
+.qauth-code-shell {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--foreground) / 0.25) transparent;
+}
+
+.qauth-demo-panel,
+.qauth-demo-step {
+  transform-origin: center;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qauth-qr-state-enter-active,
+.qauth-qr-state-leave-active {
+  transition: opacity 280ms ease, transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qauth-qr-state-enter-from,
+.qauth-qr-state-leave-to {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+.qauth-breathing-ring {
+  animation: qauth-breathing-ring 2.4s ease-in-out infinite;
+}
+
+@keyframes qauth-breathing-ring {
+  0%, 100% { opacity: 0.28; transform: scale(0.985); }
+  50% { opacity: 0.58; transform: scale(1); }
 }

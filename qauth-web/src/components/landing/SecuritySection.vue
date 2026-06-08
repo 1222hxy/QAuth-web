@@ -6,7 +6,7 @@ const controls = ["设备绑定", "短时效挑战", "防重放", "用户可见�
 </script>
 
 <template>
-  <section id="security" class="mx-auto max-w-7xl scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+  <section id="security" class="qauth-section-enter mx-auto max-w-7xl scroll-mt-24 px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
     <Card class="overflow-hidden bg-foreground p-6 text-background shadow-[0_28px_90px_hsl(var(--foreground)/0.14)] dark:bg-card dark:text-foreground lg:p-10">
       <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
