@@ -3,7 +3,7 @@ import type { Component } from "vue";
 export type Lang = "zh" | "en";
 export type RoutePath = "/" | "/demo" | "/docs" | "/security" | "/roadmap";
 export type DemoId = "desktopQr" | "mobileConfirm" | "pow" | "register" | "passkeyLogin" | "classicDesktop" | "classicMobile" | "sseFlow";
-export type HomeSection = "capabilities" | "flow" | "demos";
+export type HomeSection = "product" | "features" | "security" | "developers" | "demos";
 
 export type Demo = {
   id: DemoId;
