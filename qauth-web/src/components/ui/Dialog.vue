@@ -91,14 +91,14 @@ function trapFocus(event: KeyboardEvent) {
 
 <template>
   <Teleport to="body">
-    <div v-if="open" class="fixed inset-0 z-50 grid place-items-center bg-zinc-950/70 p-4 backdrop-blur" @click.self="emit('close')">
+    <div v-if="open" class="fixed inset-0 z-50 grid place-items-end bg-zinc-950/70 p-0 backdrop-blur sm:place-items-center sm:p-4" @click.self="emit('close')">
       <div
         ref="panel"
         role="dialog"
         aria-modal="true"
         :aria-labelledby="labelledBy"
         tabindex="-1"
-        class="max-h-[92vh] w-full max-w-6xl overflow-auto rounded-[2rem] bg-white shadow-2xl outline-none dark:bg-zinc-950"
+        class="max-h-[100dvh] w-full max-w-6xl overflow-auto rounded-t-[1.5rem] bg-white shadow-2xl outline-none dark:bg-zinc-950 sm:max-h-[92vh] sm:rounded-[2rem]"
       >
         <slot />
       </div>
