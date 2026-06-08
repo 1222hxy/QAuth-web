@@ -2,7 +2,7 @@
 
 :root {
   color-scheme: light;
-  --background: #f5f7fb;
+  --background: #eef5ff;
   --foreground: #0f172a;
 }
 
@@ -18,6 +18,10 @@ body,
   min-height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   background: var(--background);
@@ -31,43 +35,74 @@ body {
   box-sizing: border-box;
 }
 
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .qauth-page-bg {
   background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 34%),
-    radial-gradient(circle at top right, rgba(99, 102, 241, 0.18), transparent 30%),
-    linear-gradient(180deg, #f8fafc 0%, #eef6ff 48%, #f8fafc 100%);
+    radial-gradient(circle at 10% 5%, rgba(56, 189, 248, 0.34), transparent 28rem),
+    radial-gradient(circle at 90% 0%, rgba(168, 85, 247, 0.26), transparent 26rem),
+    radial-gradient(circle at 65% 45%, rgba(34, 197, 94, 0.12), transparent 22rem),
+    linear-gradient(180deg, #f8fbff 0%, #eef6ff 42%, #f8fafc 100%);
 }
 
 .dark .qauth-page-bg {
   background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 34%),
-    radial-gradient(circle at top right, rgba(99, 102, 241, 0.16), transparent 30%),
-    linear-gradient(180deg, #020617 0%, #0b1120 48%, #020617 100%);
+    radial-gradient(circle at 10% 5%, rgba(14, 165, 233, 0.22), transparent 28rem),
+    radial-gradient(circle at 90% 0%, rgba(168, 85, 247, 0.2), transparent 26rem),
+    radial-gradient(circle at 65% 45%, rgba(34, 197, 94, 0.08), transparent 22rem),
+    linear-gradient(180deg, #020617 0%, #0f172a 44%, #020617 100%);
 }
 
 .qauth-card-hover {
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease;
 }
 
 .qauth-card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
+  transform: translateY(-6px);
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.16);
+}
+
+.dark .qauth-card-hover:hover {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
+}
+
+.qauth-hero-card::before {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.6), rgba(99, 102, 241, 0.35), rgba(217, 70, 239, 0.42));
+  content: "";
 }
 
 .qauth-qr {
+  background-color: #fff;
   background-image:
-    linear-gradient(90deg, #18181b 10px, transparent 10px),
-    linear-gradient(#18181b 10px, transparent 10px),
-    radial-gradient(circle, #18181b 34%, transparent 36%);
-  background-size: 38px 38px, 38px 38px, 22px 22px;
-  background-position: 0 0, 0 0, 6px 7px;
+    linear-gradient(90deg, #0f172a 10px, transparent 10px),
+    linear-gradient(#0f172a 10px, transparent 10px),
+    radial-gradient(circle, #0f172a 34%, transparent 36%),
+    radial-gradient(circle at 20% 20%, #0f172a 0 18px, transparent 19px),
+    radial-gradient(circle at 80% 20%, #0f172a 0 18px, transparent 19px),
+    radial-gradient(circle at 20% 80%, #0f172a 0 18px, transparent 19px);
+  background-position: 0 0, 0 0, 7px 9px, 0 0, 0 0, 0 0;
+  background-size: 38px 38px, 38px 38px, 23px 23px, 100% 100%, 100% 100%, 100% 100%;
 }
 
-@keyframes pulse-line {
-  0%, 100% { opacity: 0.45; transform: scaleX(0.96); }
-  50% { opacity: 1; transform: scaleX(1); }
+@keyframes qauth-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  55% {
+    transform: translateX(-25%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
-.qauth-pulse-line {
-  animation: pulse-line 1.4s ease-in-out infinite;
+.qauth-progress {
+  animation: qauth-progress 1.8s ease-in-out infinite alternate;
 }
