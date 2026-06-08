@@ -42,7 +42,7 @@ const qrCells = [0, 1, 2, 4, 6, 8, 10, 13, 15, 17, 18, 20, 23, 24];
 </script>
 
 <template>
-  <section id="features" class="relative mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+  <section id="features" class="qauth-section-enter relative mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
     <div class="max-w-2xl">
       <p class="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Authentication capabilities</p>
       <h2 class="mt-3 text-balance text-3xl font-semibold tracking-tight text-neutral-950 dark:text-neutral-50 sm:text-4xl lg:text-5xl">为现代应用设计的认证能力</h2>

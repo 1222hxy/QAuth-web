@@ -7,7 +7,7 @@ const emit = defineEmits<{ navigate: [to: string] }>();
 </script>
 
 <template>
-  <section id="product" class="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-14 pt-10 sm:px-6 sm:pb-18 sm:pt-16 lg:grid-cols-[0.96fr_1.04fr] lg:px-8 lg:pb-24 lg:pt-20">
+  <section id="product" class="qauth-section-enter mx-auto grid max-w-7xl items-center gap-10 px-4 pb-14 pt-10 sm:px-6 sm:pb-18 sm:pt-16 lg:grid-cols-[0.96fr_1.04fr] lg:px-8 lg:pb-24 lg:pt-20">
     <div class="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
       <p class="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-muted-foreground sm:text-xs">QAUTH / DEVICE-FIRST AUTHENTICATION ENGINE</p>
       <h1 class="mt-5 text-balance text-[clamp(2.55rem,8.6vw,5.9rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-foreground">把登录变成可信设备确认</h1>
