@@ -1,36 +1,37 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { Languages, Moon, ShieldCheck, Sun } from "lucide-vue-next";
-import Button from "./components/ui/Button.vue";
+import AppFooter from "./components/layout/AppFooter.vue";
+import AppHeader from "./components/layout/AppHeader.vue";
 import DemoDialog from "./components/demos/DemoDialog.vue";
 import DocsView from "./components/views/DocsView.vue";
 import LandingView from "./components/views/LandingView.vue";
 import RoadmapView from "./components/views/RoadmapView.vue";
 import SecurityView from "./components/views/SecurityView.vue";
-import { copy } from "./content";
 import type { DemoId, Lang, NavTarget, RoutePath } from "./types";
+
+type ThemeMode = "light" | "dark" | "system";
 
 const ROUTES: RoutePath[] = ["/", "/demo", "/docs", "/security", "/roadmap"];
 
 const lang = ref<Lang>("zh");
-const dark = ref(false);
+const themeMode = ref<ThemeMode>("system");
 const path = ref<RoutePath>("/");
 const modalDemo = ref<DemoId | null>(null);
+let mediaQuery: MediaQueryList | null = null;
 
-const t = computed(() => copy[lang.value]);
 const navItems = computed<NavTarget[]>(() => [
-  { label: t.value.nav.position, to: "/" },
-  { label: t.value.nav.capabilities, to: "/demo", hash: "#capabilities" },
-  { label: t.value.nav.flow, to: "/demo", hash: "#flow" },
-  { label: t.value.nav.demos, to: "/demo", hash: "#demos" },
-  { label: t.value.nav.security, to: "/security" },
-  { label: t.value.nav.roadmap, to: "/roadmap" },
+  { label: "产品", to: "/", hash: "#product" },
+  { label: "安全", to: "/", hash: "#security" },
+  { label: "文档", to: "/docs" },
+  { label: "Demo", to: "/demo", hash: "#demos" },
 ]);
 const currentRoute = computed<RoutePath>(() => path.value);
 
 onMounted(() => {
   lang.value = localStorage.getItem("qauth-lang") === "en" ? "en" : "zh";
-  dark.value = localStorage.getItem("qauth-theme") === "dark" || (!localStorage.getItem("qauth-theme") && matchMedia("(prefers-color-scheme: dark)").matches);
+  themeMode.value = readThemeMode();
+  mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  mediaQuery.addEventListener("change", applyTheme);
   syncPathFromLocation();
   applyTheme();
   document.documentElement.lang = lang.value === "zh" ? "zh-CN" : "en";
@@ -39,6 +40,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener("popstate", syncPathFromLocation);
+  mediaQuery?.removeEventListener("change", applyTheme);
 });
 
 watch(lang, (value) => {
@@ -46,7 +48,15 @@ watch(lang, (value) => {
   document.documentElement.lang = value === "zh" ? "zh-CN" : "en";
 });
 
-watch(dark, applyTheme);
+watch(themeMode, (mode) => {
+  localStorage.setItem("qauth-theme", mode);
+  applyTheme();
+});
+
+function readThemeMode(): ThemeMode {
+  const stored = localStorage.getItem("qauth-theme");
+  return stored === "light" || stored === "dark" || stored === "system" ? stored : "system";
+}
 
 function normalizePath(value: string): RoutePath {
   return ROUTES.includes(value as RoutePath) ? (value as RoutePath) : "/";
@@ -58,8 +68,9 @@ function syncPathFromLocation() {
 }
 
 function applyTheme() {
-  document.documentElement.classList.toggle("dark", dark.value);
-  localStorage.setItem("qauth-theme", dark.value ? "dark" : "light");
+  const shouldDark = themeMode.value === "dark" || (themeMode.value === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.classList.toggle("dark", shouldDark);
+  document.documentElement.style.colorScheme = shouldDark ? "dark" : "light";
 }
 
 function navigate(target: string | NavTarget) {
@@ -83,36 +94,17 @@ function openDemo(id: DemoId) {
 </script>
 
 <template>
-  <main class="qauth-page-bg min-h-screen overflow-hidden text-[#111] dark:text-[#f4f4f0]">
-    <header class="sticky top-0 z-40 border-b border-black/10 bg-[#f7f7f4]/90 backdrop-blur-2xl dark:border-white/10 dark:bg-[#111]/85">
-      <div class="mx-auto flex max-w-[1440px] items-center justify-between gap-3 px-3 py-3 md:px-8">
-        <button class="group flex items-center gap-3" @click="navigate('/')">
-          <span class="grid size-9 place-items-center rounded-full bg-[#111] text-white dark:bg-white dark:text-[#111]"><ShieldCheck :size="18" /></span>
-          <span class="text-left">
-            <span class="block text-base font-semibold tracking-tight">QAuth</span>
-            <span class="hidden text-xs text-neutral-500 dark:text-neutral-400 sm:block">{{ t.badge }}</span>
-          </span>
-        </button>
+  <div class="qauth-page-bg min-h-screen overflow-hidden text-foreground">
+    <AppHeader :nav-items="navItems" :theme-mode="themeMode" @navigate="navigate" @update:theme-mode="themeMode = $event" />
 
-        <nav class="hidden items-center gap-5 lg:flex">
-          <button v-for="item in navItems" :key="item.label" class="text-sm font-medium text-neutral-600 transition hover:text-[#111] dark:text-neutral-300 dark:hover:text-white" @click="navigate(item)">
-            {{ item.label }}
-          </button>
-        </nav>
+    <main>
+      <LandingView v-if="currentRoute === '/' || currentRoute === '/demo'" :lang="lang" @navigate="navigate" @open-demo="openDemo" />
+      <DocsView v-else-if="currentRoute === '/docs'" :lang="lang" @navigate="navigate" />
+      <SecurityView v-else-if="currentRoute === '/security'" :lang="lang" />
+      <RoadmapView v-else-if="currentRoute === '/roadmap'" :lang="lang" />
+    </main>
 
-        <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <Button variant="ghost" size="sm" class="rounded-full px-2 sm:px-3" @click="lang = lang === 'zh' ? 'en' : 'zh'"><Languages :size="15" /><span class="hidden sm:inline">{{ lang.toUpperCase() }}</span></Button>
-          <Button variant="ghost" size="sm" class="rounded-full px-2 sm:px-3" @click="dark = !dark"><Sun v-if="dark" :size="16" /><Moon v-else :size="16" /></Button>
-          <Button size="sm" class="rounded-full px-3 sm:px-4" @click="navigate('/demo#demos')">{{ t.demo }}</Button>
-        </div>
-      </div>
-    </header>
-
-    <LandingView v-if="currentRoute === '/' || currentRoute === '/demo'" :lang="lang" @navigate="navigate" @open-demo="openDemo" />
-    <DocsView v-else-if="currentRoute === '/docs'" :lang="lang" @navigate="navigate" />
-    <SecurityView v-else-if="currentRoute === '/security'" :lang="lang" />
-    <RoadmapView v-else-if="currentRoute === '/roadmap'" :lang="lang" />
-
+    <AppFooter />
     <DemoDialog :demo-id="modalDemo" :lang="lang" @close="modalDemo = null" />
-  </main>
+  </div>
 </template>

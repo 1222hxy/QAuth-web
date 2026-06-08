@@ -4,19 +4,19 @@ import { computed } from "vue";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 disabled:pointer-events-none disabled:opacity-50 dark:focus-visible:ring-white/30",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
   {
     variants: {
       variant: {
-        default: "bg-[#111] text-white shadow-sm hover:bg-[#2a2a2a] dark:bg-[#f4f4f0] dark:text-[#111] dark:hover:bg-white",
-        secondary: "bg-neutral-100 text-[#111] hover:bg-neutral-200 dark:bg-white/10 dark:text-[#f4f4f0] dark:hover:bg-white/15",
-        outline: "border border-black/10 bg-transparent text-[#111] hover:bg-black/5 dark:border-white/15 dark:text-[#f4f4f0] dark:hover:bg-white/10",
-        ghost: "text-neutral-700 hover:bg-black/5 dark:text-neutral-200 dark:hover:bg-white/10",
+        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md",
+        secondary: "bg-secondary text-foreground hover:bg-accent",
+        outline: "border border-border bg-transparent text-foreground hover:border-foreground/20 hover:bg-secondary",
+        ghost: "text-muted-foreground hover:bg-secondary hover:text-foreground",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-8 px-3 text-xs",
-        lg: "h-12 px-6 text-base",
+        lg: "h-11 px-5 text-sm sm:h-12 sm:px-6 sm:text-base",
       },
     },
     defaultVariants: { variant: "default", size: "default" },
