@@ -2,14 +2,14 @@
 
 :root {
   color-scheme: light;
-  --background: #eef5ff;
-  --foreground: #0f172a;
+  --background: #f7f7f4;
+  --foreground: #111111;
 }
 
 .dark {
   color-scheme: dark;
-  --background: #020617;
-  --foreground: #f8fafc;
+  --background: #111111;
+  --foreground: #f4f4f0;
 }
 
 html,
@@ -42,40 +42,22 @@ a {
 
 .qauth-page-bg {
   background:
-    radial-gradient(circle at 10% 5%, rgba(56, 189, 248, 0.34), transparent 28rem),
-    radial-gradient(circle at 90% 0%, rgba(168, 85, 247, 0.26), transparent 26rem),
-    radial-gradient(circle at 65% 45%, rgba(34, 197, 94, 0.12), transparent 22rem),
-    linear-gradient(180deg, #f8fbff 0%, #eef6ff 42%, #f8fafc 100%);
+    radial-gradient(circle at 78% 8%, rgba(17, 17, 17, 0.08), transparent 26rem),
+    linear-gradient(180deg, #f7f7f4 0%, #f7f7f4 58%, #ece9df 100%);
 }
 
 .dark .qauth-page-bg {
   background:
-    radial-gradient(circle at 10% 5%, rgba(14, 165, 233, 0.22), transparent 28rem),
-    radial-gradient(circle at 90% 0%, rgba(168, 85, 247, 0.2), transparent 26rem),
-    radial-gradient(circle at 65% 45%, rgba(34, 197, 94, 0.08), transparent 22rem),
-    linear-gradient(180deg, #020617 0%, #0f172a 44%, #020617 100%);
+    radial-gradient(circle at 78% 8%, rgba(255, 255, 255, 0.1), transparent 26rem),
+    linear-gradient(180deg, #111111 0%, #111111 58%, #191919 100%);
 }
 
 .qauth-card-hover {
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease;
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease;
 }
 
 .qauth-card-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.16);
-}
-
-.dark .qauth-card-hover:hover {
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
-}
-
-.qauth-hero-card::before {
-  position: absolute;
-  inset: -1px;
-  z-index: -1;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.6), rgba(99, 102, 241, 0.35), rgba(217, 70, 239, 0.42));
-  content: "";
+  transform: translateY(-4px);
 }
 
 @keyframes qauth-progress {
@@ -91,5 +73,5 @@ a {
 }
 
 .qauth-progress {
-  animation: qauth-progress 1.8s ease-in-out infinite alternate;
+  animation: qauth-progress 1.2s ease-in-out infinite alternate;
 }

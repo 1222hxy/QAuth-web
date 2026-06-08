@@ -83,27 +83,27 @@ function openDemo(id: DemoId) {
 </script>
 
 <template>
-  <main class="qauth-page-bg min-h-screen overflow-hidden text-zinc-950 dark:text-zinc-50">
-    <header class="sticky top-0 z-40 border-b border-white/60 bg-white/75 shadow-sm shadow-slate-200/40 backdrop-blur-2xl dark:border-white/10 dark:bg-slate-950/70 dark:shadow-black/20">
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+  <main class="qauth-page-bg min-h-screen overflow-hidden text-[#111] dark:text-[#f4f4f0]">
+    <header class="sticky top-0 z-40 border-b border-black/10 bg-[#f7f7f4]/90 backdrop-blur-2xl dark:border-white/10 dark:bg-[#111]/85">
+      <div class="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 md:px-8">
         <button class="group flex items-center gap-3" @click="navigate('/')">
-          <span class="grid size-10 place-items-center rounded-2xl bg-zinc-950 text-white shadow-lg shadow-sky-500/20 dark:bg-white dark:text-zinc-950"><ShieldCheck :size="20" /></span>
+          <span class="grid size-9 place-items-center rounded-full bg-[#111] text-white dark:bg-white dark:text-[#111]"><ShieldCheck :size="18" /></span>
           <span class="text-left">
-            <span class="block text-lg font-black tracking-tight">QAuth</span>
-            <span class="hidden text-xs text-zinc-500 dark:text-zinc-400 sm:block">{{ t.badge }}</span>
+            <span class="block text-base font-semibold tracking-tight">QAuth</span>
+            <span class="hidden text-xs text-neutral-500 dark:text-neutral-400 sm:block">{{ t.badge }}</span>
           </span>
         </button>
 
-        <nav class="hidden items-center gap-1 rounded-full border border-zinc-200/80 bg-white/70 p-1 shadow-sm dark:border-white/10 dark:bg-white/5 lg:flex">
-          <button v-for="item in navItems" :key="item.label" class="rounded-full px-4 py-2 text-sm font-medium text-zinc-600 transition hover:bg-zinc-950 hover:text-white dark:text-zinc-300 dark:hover:bg-white dark:hover:text-zinc-950" @click="navigate(item)">
+        <nav class="hidden items-center gap-5 lg:flex">
+          <button v-for="item in navItems" :key="item.label" class="text-sm font-medium text-neutral-600 transition hover:text-[#111] dark:text-neutral-300 dark:hover:text-white" @click="navigate(item)">
             {{ item.label }}
           </button>
         </nav>
 
         <div class="flex items-center gap-2">
-          <Button variant="outline" size="sm" class="rounded-full" @click="lang = lang === 'zh' ? 'en' : 'zh'"><Languages :size="15" />{{ lang.toUpperCase() }}</Button>
-          <Button variant="outline" size="sm" class="rounded-full" @click="dark = !dark"><Sun v-if="dark" :size="16" /><Moon v-else :size="16" /></Button>
-          <Button size="sm" class="rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-4 shadow-lg shadow-sky-500/25 hover:from-sky-400 hover:to-indigo-500" @click="navigate('/demo#demos')">{{ t.demo }}</Button>
+          <Button variant="ghost" size="sm" class="rounded-full" @click="lang = lang === 'zh' ? 'en' : 'zh'"><Languages :size="15" />{{ lang.toUpperCase() }}</Button>
+          <Button variant="ghost" size="sm" class="rounded-full" @click="dark = !dark"><Sun v-if="dark" :size="16" /><Moon v-else :size="16" /></Button>
+          <Button size="sm" class="rounded-full px-4" @click="navigate('/demo#demos')">{{ t.demo }}</Button>
         </div>
       </div>
     </header>
