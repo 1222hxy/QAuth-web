@@ -5,12 +5,12 @@ import AppHeader from "./components/layout/AppHeader.vue";
 import OfflineStatus from "./components/pwa/OfflineStatus.vue";
 import PwaInstallPrompt from "./components/pwa/PwaInstallPrompt.vue";
 import PwaUpdatePrompt from "./components/pwa/PwaUpdatePrompt.vue";
-import DemoDialog from "./components/demos/DemoDialog.vue";
 import DocsView from "./components/views/DocsView.vue";
 import LandingView from "./components/views/LandingView.vue";
+import DemoPage from "./components/views/DemoPage.vue";
 import RoadmapView from "./components/views/RoadmapView.vue";
 import SecurityView from "./components/views/SecurityView.vue";
-import type { DemoId, Lang, NavTarget, RoutePath } from "./types";
+import type { Lang, NavTarget, RoutePath } from "./types";
 
 type ThemeMode = "light" | "dark" | "system";
 
@@ -19,14 +19,13 @@ const ROUTES: RoutePath[] = ["/", "/demo", "/docs", "/security", "/roadmap"];
 const lang = ref<Lang>("zh");
 const themeMode = ref<ThemeMode>("system");
 const path = ref<RoutePath>("/");
-const modalDemo = ref<DemoId | null>(null);
 let mediaQuery: MediaQueryList | null = null;
 
 const navItems = computed<NavTarget[]>(() => [
   { label: "产品", to: "/", hash: "#product" },
   { label: "安全", to: "/", hash: "#security" },
   { label: "文档", to: "/docs" },
-  { label: "Demo", to: "/demo", hash: "#demos" },
+  { label: "Demo", to: "/demo" },
 ]);
 const currentRoute = computed<RoutePath>(() => path.value);
 
@@ -91,24 +90,21 @@ function scrollToHash(hash: string) {
   nextTick(() => document.querySelector(hash)?.scrollIntoView({ behavior: "smooth", block: "start" }));
 }
 
-function openDemo(id: DemoId) {
-  modalDemo.value = id;
-}
 </script>
 
 <template>
-  <div class="qauth-page-bg min-h-screen overflow-hidden text-foreground">
+  <div class="qauth-page-bg min-h-screen text-foreground">
     <AppHeader :nav-items="navItems" :theme-mode="themeMode" @navigate="navigate" @update:theme-mode="themeMode = $event" />
 
     <main>
-      <LandingView v-if="currentRoute === '/' || currentRoute === '/demo'" :lang="lang" @navigate="navigate" @open-demo="openDemo" />
+      <LandingView v-if="currentRoute === '/'" :lang="lang" @navigate="navigate" />
+      <DemoPage v-else-if="currentRoute === '/demo'" :lang="lang" @navigate="navigate" />
       <DocsView v-else-if="currentRoute === '/docs'" :lang="lang" @navigate="navigate" />
       <SecurityView v-else-if="currentRoute === '/security'" :lang="lang" />
       <RoadmapView v-else-if="currentRoute === '/roadmap'" :lang="lang" />
     </main>
 
     <AppFooter />
-    <DemoDialog :demo-id="modalDemo" :lang="lang" @close="modalDemo = null" />
     <PwaInstallPrompt />
     <PwaUpdatePrompt />
     <OfflineStatus />
