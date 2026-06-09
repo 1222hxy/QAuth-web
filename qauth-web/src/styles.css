@@ -3,6 +3,8 @@
 
 :root {
   color-scheme: light;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --header-height: 4rem;
   --background: 48 25% 96%;
   --foreground: 24 6% 10%;
   --muted: 40 14% 91%;
@@ -106,33 +108,24 @@ button {
   box-shadow: 0 18px 55px hsl(var(--foreground) / 0.08);
 }
 
-.qauth-soft-pulse {
-  animation: qauth-soft-pulse 2.2s ease-in-out infinite;
-}
-
-@keyframes qauth-soft-pulse {
-  0%, 100% { opacity: 0.55; transform: scale(0.92); }
-  50% { opacity: 1; transform: scale(1); }
-}
-
 .qauth-status-move,
 .qauth-status-enter-active,
 .qauth-status-leave-active,
 .qauth-mobile-menu-enter-active,
 .qauth-mobile-menu-leave-active {
-  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1), transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .qauth-status-enter-from,
 .qauth-status-leave-to {
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(3px);
 }
 
 .qauth-mobile-menu-enter-from,
 .qauth-mobile-menu-leave-to {
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-4px);
 }
 
 @keyframes qauth-progress {
@@ -142,7 +135,7 @@ button {
 }
 
 .qauth-progress {
-  animation: qauth-progress 1.2s ease-in-out infinite alternate;
+  animation: qauth-progress 1.2s ease-out infinite alternate;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -157,7 +150,7 @@ button {
 }
 
 .qauth-section-enter {
-  animation: qauth-section-enter 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: qauth-section-enter 360ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .qauth-section-enter:nth-of-type(2) { animation-delay: 60ms; }
@@ -166,7 +159,7 @@ button {
 .qauth-section-enter:nth-of-type(5) { animation-delay: 180ms; }
 
 @keyframes qauth-section-enter {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -212,22 +205,13 @@ button {
 
 .qauth-qr-state-enter-active,
 .qauth-qr-state-leave-active {
-  transition: opacity 280ms ease, transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 220ms ease-out, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .qauth-qr-state-enter-from,
 .qauth-qr-state-leave-to {
   opacity: 0;
-  transform: scale(0.96);
-}
-
-.qauth-breathing-ring {
-  animation: qauth-breathing-ring 2.4s ease-in-out infinite;
-}
-
-@keyframes qauth-breathing-ring {
-  0%, 100% { opacity: 0.28; transform: scale(0.985); }
-  50% { opacity: 0.58; transform: scale(1); }
+  transform: translateY(2px);
 }
 
 body {
@@ -250,4 +234,38 @@ body {
 .qauth-pwa-toast-leave-to {
   opacity: 0;
   transform: translateY(8px);
+}
+
+.qauth-page-bg {
+  overflow-x: clip;
+}
+
+@media (max-width: 767px) {
+  .app-header {
+    padding-top: 0.75rem;
+    padding-top: max(0.75rem, var(--safe-top));
+  }
+}
+
+@media (display-mode: standalone) and (max-width: 767px) {
+  .app-header {
+    padding-top: 1rem;
+    padding-top: max(1rem, var(--safe-top));
+  }
+}
+
+
+.qauth-demo-fade-enter-active,
+.qauth-demo-fade-leave-active,
+.qauth-details-enter-active,
+.qauth-details-leave-active {
+  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1), transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qauth-demo-fade-enter-from,
+.qauth-demo-fade-leave-to,
+.qauth-details-enter-from,
+.qauth-details-leave-to {
+  opacity: 0;
+  transform: translateY(4px);
 }

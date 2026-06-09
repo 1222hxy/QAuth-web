@@ -13,7 +13,7 @@ const emit = defineEmits<{ navigate: [to: string] }>();
       <h1 class="mt-5 text-balance text-[clamp(2.55rem,8.6vw,5.9rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-foreground">把登录变成可信设备确认</h1>
       <p class="mx-auto mt-6 max-w-2xl text-pretty text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8 lg:mx-0">QAuth 为现代应用提供无密码认证能力。通过 Passkey、扫码确认、设备绑定与二次验证，让用户在熟悉的设备上安全完成登录。</p>
       <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
-        <Button size="lg" class="group rounded-full px-5 sm:px-6" @click="emit('navigate', '/demo#demos')">进入 Demo <ArrowRight class="transition duration-200 group-hover:translate-x-0.5" :size="18" /></Button>
+        <Button size="lg" class="group rounded-full px-5 sm:px-6" @click="emit('navigate', '/demo')">进入 Demo <ArrowRight class="transition duration-200 group-hover:translate-x-0.5" :size="18" /></Button>
         <Button variant="outline" size="lg" class="rounded-full px-5 sm:px-6" @click="emit('navigate', '/#security')"><ShieldCheck :size="18" />查看安全设计</Button>
       </div>
       <div class="mt-8 grid grid-cols-3 gap-3 border-t border-border pt-5 text-left text-xs text-muted-foreground sm:text-sm">

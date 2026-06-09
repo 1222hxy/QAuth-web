@@ -90,7 +90,7 @@ const qrCells = [0, 1, 2, 4, 6, 8, 10, 13, 15, 17, 18, 20, 23, 24];
                 <span class="size-2 rounded-full bg-neutral-700 dark:bg-zinc-300" />
               </span>
               <div>
-                <p class="text-xs text-neutral-500 dark:text-zinc-500">Device recognized</p>
+                <p class="text-xs text-neutral-500 dark:text-zinc-500">Device Recognized</p>
                 <p class="mt-1 text-sm font-semibold text-neutral-950 dark:text-neutral-50">iPhone 15 Pro</p>
               </div>
             </div>
@@ -107,7 +107,7 @@ const qrCells = [0, 1, 2, 4, 6, 8, 10, 13, 15, 17, 18, 20, 23, 24];
             <div class="min-w-0 space-y-2 text-sm">
               <p class="flex items-center justify-between gap-3"><span class="text-neutral-500 dark:text-zinc-500">Session ID</span><span class="font-mono font-medium text-neutral-900 dark:text-zinc-100">qa_7K92M4</span></p>
               <p class="flex items-center justify-between gap-3"><span class="text-neutral-500 dark:text-zinc-500">Expires in</span><span class="font-medium text-neutral-900 dark:text-zinc-100">02:58</span></p>
-              <p class="flex items-center justify-between gap-3"><span class="text-neutral-500 dark:text-zinc-500">Status</span><span class="inline-flex items-center gap-2 font-medium text-neutral-900 dark:text-zinc-100"><span class="size-1.5 rounded-full bg-neutral-700 qauth-soft-pulse dark:bg-zinc-300" />Waiting for approval</span></p>
+              <p class="flex items-center justify-between gap-3"><span class="text-neutral-500 dark:text-zinc-500">Status</span><span class="inline-flex items-center gap-2 font-medium text-neutral-900 dark:text-zinc-100"><span class="size-1.5 rounded-full bg-neutral-700 dark:bg-zinc-300" />Waiting for approval</span></p>
             </div>
           </div>
 

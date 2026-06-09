@@ -18,7 +18,7 @@ const emit = defineEmits<{
 const isScrolled = ref(false);
 const menuOpen = ref(false);
 const headerClasses = computed(() => [
-  "sticky top-0 z-40 border-b backdrop-blur-2xl transition-[background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+  "app-header sticky top-0 z-50 border-b backdrop-blur-2xl transition-[background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
   isScrolled.value
     ? "border-border/80 bg-background/88 shadow-[0_1px_22px_hsl(var(--foreground)/0.07)]"
     : "border-transparent bg-background/55 shadow-none",
@@ -44,9 +44,9 @@ function go(target: string | NavTarget) {
 
 <template>
   <header :class="headerClasses">
-    <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
       <button class="group flex items-center gap-3 rounded-full outline-none transition focus-visible:ring-2 focus-visible:ring-ring" @click="go('/')">
-        <span class="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground shadow-sm transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-md group-active:scale-95">
+        <span class="grid size-9 place-items-center rounded-full bg-primary text-primary-foreground shadow-sm transition duration-200 group-hover:-translate-y-px group-hover:shadow-md group-active:scale-[0.98]">
           <ShieldCheck :size="18" />
         </span>
         <span class="text-left">
@@ -63,10 +63,10 @@ function go(target: string | NavTarget) {
 
       <div class="hidden items-center gap-2 md:flex">
         <ThemeToggle :mode="themeMode" @update:mode="emit('update:themeMode', $event)" />
-        <Button size="sm" class="rounded-full px-4" @click="go('/demo#demos')">进入 Demo</Button>
+        <Button size="sm" class="rounded-full px-4" @click="go('/demo')">进入 Demo</Button>
       </div>
 
-      <button class="grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:-translate-y-0.5 hover:bg-secondary active:scale-95 md:hidden" aria-label="Open menu" @click="menuOpen = !menuOpen">
+      <button class="grid size-10 place-items-center rounded-full border border-border bg-card text-foreground transition hover:-translate-y-px hover:bg-secondary active:scale-95 md:hidden" aria-label="Open menu" @click="menuOpen = !menuOpen">
         <X v-if="menuOpen" :size="18" />
         <Menu v-else :size="18" />
       </button>
@@ -81,7 +81,7 @@ function go(target: string | NavTarget) {
         </nav>
         <div class="mx-auto mt-4 flex max-w-7xl items-center gap-2">
           <ThemeToggle :mode="themeMode" @update:mode="emit('update:themeMode', $event)" />
-          <Button class="flex-1 rounded-full" @click="go('/demo#demos')">进入 Demo</Button>
+          <Button class="flex-1 rounded-full" @click="go('/demo')">进入 Demo</Button>
         </div>
       </div>
     </Transition>
