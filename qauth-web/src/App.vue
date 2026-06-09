@@ -2,6 +2,9 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import AppFooter from "./components/layout/AppFooter.vue";
 import AppHeader from "./components/layout/AppHeader.vue";
+import OfflineStatus from "./components/pwa/OfflineStatus.vue";
+import PwaInstallPrompt from "./components/pwa/PwaInstallPrompt.vue";
+import PwaUpdatePrompt from "./components/pwa/PwaUpdatePrompt.vue";
 import DemoDialog from "./components/demos/DemoDialog.vue";
 import DocsView from "./components/views/DocsView.vue";
 import LandingView from "./components/views/LandingView.vue";
@@ -106,5 +109,8 @@ function openDemo(id: DemoId) {
 
     <AppFooter />
     <DemoDialog :demo-id="modalDemo" :lang="lang" @close="modalDemo = null" />
+    <PwaInstallPrompt />
+    <PwaUpdatePrompt />
+    <OfflineStatus />
   </div>
 </template>

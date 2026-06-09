@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">QAuth app icon</title>
+  <desc id="desc">A restrained dark QAuth shield icon for PWA manifest usage.</desc>
+  <rect width="512" height="512" rx="112" fill="#0f0f0f"/>
+  <rect x="54" y="54" width="404" height="404" rx="92" fill="#111827"/>
+  <path d="M256 86 137 140v97c0 132 82 217 119 233 37-16 119-101 119-233v-97L256 86Z" fill="#1f2937" stroke="#f8fafc" stroke-width="20" stroke-linejoin="round"/>
+  <path d="M204 240v-32c0-29 23-52 52-52s52 23 52 52v32" fill="none" stroke="#f8fafc" stroke-width="26" stroke-linecap="round"/>
+  <rect x="184" y="232" width="144" height="112" rx="28" fill="#f8fafc"/>
+  <circle cx="256" cy="286" r="15" fill="#0f172a"/>
+  <path d="M256 301v28" stroke="#0f172a" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="351" cy="351" r="58" fill="#f8fafc"/>
+  <path d="m326 351 18 18 36-39" fill="none" stroke="#0f172a" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
