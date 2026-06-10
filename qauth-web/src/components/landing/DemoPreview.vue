@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { CheckCircle2, Clock3, Laptop, ShieldCheck, Smartphone } from "lucide-vue-next";
+import { CheckCircle2, Clock3, Fingerprint, Laptop, ShieldCheck, Smartphone } from "lucide-vue-next";
 import Badge from "../ui/Badge.vue";
 import Card from "../ui/Card.vue";
 import RealQrCode from "../demos/RealQrCode.vue";
@@ -41,11 +41,11 @@ function stepState(index: number) {
     <div class="rounded-[1.35rem] border border-border bg-background/65 p-4 sm:rounded-[1.5rem] sm:p-5">
       <div class="flex min-w-0 flex-wrap items-start justify-between gap-3">
         <div class="min-w-0">
-          <p class="truncate text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">account.qauth.dev</p>
+          <p class="truncate text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">QAuth Workspace</p>
           <h2 class="mt-2 text-2xl font-semibold tracking-[-0.03em] text-foreground">QAuth Login</h2>
         </div>
         <Badge class="shrink-0 gap-1.5 border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
-          <span class="size-1.5 rounded-full bg-emerald-500" /> Live Browser APIs
+          <span class="size-1.5 rounded-full bg-emerald-500" /> Passkey / WebAuthn
         </Badge>
       </div>
 
@@ -60,18 +60,24 @@ function stepState(index: number) {
           <div class="relative mt-3 overflow-hidden rounded-[1.1rem] border border-border bg-white p-3 dark:bg-zinc-100">
             <span v-if="!qrApproved" class="absolute inset-2 rounded-[0.95rem] border border-emerald-500/25" aria-hidden="true" />
             <Transition name="qauth-qr-state" mode="out-in">
-              <div v-if="qrApproved" key="approved" class="mx-auto grid aspect-square w-full max-w-[13.25rem] place-items-center overflow-hidden rounded-xl bg-white text-center sm:max-w-52">
+              <div v-if="qrApproved" key="approved" class="mx-auto grid aspect-square w-full max-w-[9.25rem] place-items-center overflow-hidden rounded-xl bg-white text-center sm:max-w-36">
                 <div>
                   <span class="mx-auto grid size-12 place-items-center rounded-full bg-emerald-500/10 text-emerald-700"><CheckCircle2 :size="24" /></span>
                   <p class="mt-3 text-sm font-semibold text-neutral-950">Verified</p>
                   <p class="mt-1 text-xs text-neutral-500">Session Approved</p>
                 </div>
               </div>
-              <RealQrCode v-else key="qr" :value="session.payload" class="mx-auto aspect-square w-full max-w-[13.25rem] rounded-xl sm:max-w-52" />
+              <RealQrCode v-else key="qr" :value="session.payload" class="mx-auto aspect-square w-full max-w-[9.25rem] rounded-xl sm:max-w-36" />
             </Transition>
           </div>
-          <div class="mt-3 grid grid-cols-4 gap-2">
-            <span v-for="symbol in session.symbols" :key="symbol" class="grid h-9 place-items-center rounded-xl border border-border bg-secondary text-lg transition duration-300" :class="qrApproved ? 'opacity-[0.55]' : 'opacity-100'">{{ symbol }}</span>
+          <div class="mt-3 rounded-2xl border border-border bg-background/70 p-3">
+            <div class="flex items-center gap-2 text-sm font-semibold"><Fingerprint :size="15" />Passkey Ready</div>
+            <dl class="mt-2 grid gap-1 text-xs text-muted-foreground">
+              <div class="flex min-w-0 justify-between gap-3"><dt>Method</dt><dd class="truncate font-medium text-foreground">WebAuthn</dd></div>
+              <div class="flex min-w-0 justify-between gap-3"><dt>Authenticator</dt><dd class="truncate font-medium text-foreground">Platform</dd></div>
+              <div class="flex min-w-0 justify-between gap-3"><dt>User Verification</dt><dd class="truncate font-medium text-foreground">Required</dd></div>
+              <div class="flex min-w-0 justify-between gap-3"><dt>Status</dt><dd class="truncate font-medium text-foreground">Ready</dd></div>
+            </dl>
           </div>
         </div>
 
