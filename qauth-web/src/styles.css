@@ -1,4 +1,9 @@
 @import "tailwindcss";
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --header-height: 64px;
+}
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
@@ -238,6 +243,16 @@ body {
 
 .qauth-page-bg {
   overflow-x: clip;
+}
+
+.app-header {
+  padding-top: max(0.75rem, var(--safe-top));
+}
+
+@media (display-mode: standalone) {
+  .app-header {
+    padding-top: max(1rem, var(--safe-top));
+  }
 }
 
 @media (max-width: 767px) {
